@@ -40,7 +40,7 @@ def profile(request):
 
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
     }
     # pass context to template
     return render(request, 'users/profile.html', context)
