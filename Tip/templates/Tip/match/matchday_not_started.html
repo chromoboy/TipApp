@@ -1,0 +1,53 @@
+{% extends "tip/base.html" %}
+{% block content %}
+
+
+<section data-role="content">
+    {% for match in match %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <div class="row">
+                <div class="col">
+                    <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>
+                </div>
+                <div class="col">
+                    <small class="text-muted">Ergebnis</small><br>
+                    <small class="text-muted">Tipp</small>
+                </div>
+                <div class="col">
+{#                  <small class="text-muted">Punkte</small>#}
+                </div>
+                <div class="col">
+                  <small class="text-muted">Punkte</small>
+                </div>
+              </div>
+{#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
+            </div>
+              <div class="row">
+        <div class="col">
+            <p class=>{{ match.home_team.team_name}}</p>
+        </div>
+        <div class="col">
+            <input type="text" data-mini="true" class="tippspiel_tippfield" id="Tipp-{{ match.id }}"
+                   name="Tipp-{{ match.id }}"
+                   placeholder=
+                   "{% if tipp %}
+                       {{ tipp.home }}:{{ tipp.guest }}
+                   {% else %}
+                       -:-
+                   {% endif %}" />
+        </div>
+        <div class="col">
+              <p>{{ match.guest_team.team_name}}</p>
+        </div>
+        <div class="col">
+              <p>0</p>
+        </div>
+      </div>
+          </div>
+        </article>
+    {%  endfor %}
+</section>
+
+{% endblock content %}
