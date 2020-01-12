@@ -28,6 +28,19 @@ ul {
   font-weight: 500;
 }
 
+.tippspiel_match_result {
+    color: #ffffff;
+    font-size: x-large;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.tippspiel_tipp_result {
+    color: #060;
+    font-size: x-large;
+    text-align: center;
+}
+
 .content-section {
   background: #ffffff;
   padding: 10px 20px;

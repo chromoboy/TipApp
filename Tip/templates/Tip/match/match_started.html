@@ -1,9 +1,7 @@
-{% extends "tip/base.html" %}
+{% load i18n staticfiles %}
 {% block content %}
 
-
 <section data-role="content">
-    {% for match in match %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -29,25 +27,30 @@
             <p class=>{{ match.home_team.team_name}}</p>
         </div>
         <div class="col">
-            <input type="text" data-mini="true" class="tippspiel_tippfield" id="Tipp-{{ match.id }}"
-                   name="Tipp-{{ match.id }}"
-                   placeholder=
-                   "{% if tipp %}
-                       {{ tipp.home }}:{{ tipp.guest }}
-                   {% else %}
-                       -:-
-                   {% endif %}" />
+                        <p class="tippspiel_match_result">
+                                {% if match.home_score == -1 or match.guest_score == -1 %}
+                                -:-
+                                {% else %}
+                                {{ match.home_score }}:{{ match.guest_score }}
+                                {% endif %}
+                        </p>
+                        <p class="tippspiel_tipp_result">
+                                {% if tipp %}
+                                {{ tipp.tip_home }}:{{ tipp.tip_guest }} ({{ tipp.points }})
+                                {% else %}
+                                -:- (0 {% trans "points" %})
+                                {% endif %}
+                        </p>
         </div>
         <div class="col">
               <p>{{ match.guest_team.team_name}}</p>
         </div>
         <div class="col">
-              <p>0</p>
+              <p>{{ tipp.points }}</p>
         </div>
       </div>
           </div>
         </article>
-    {%  endfor %}
 </section>
 
 {% endblock content %}

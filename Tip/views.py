@@ -1,10 +1,12 @@
-from datetime import timezone
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_protect
 from users.models import User
 from .models import Match, Team, Tip
 from django.http import Http404, HttpResponseRedirect
 import re
+from django.utils import timezone
 
 
 def home(request):
@@ -17,6 +19,8 @@ def home(request):
     # HttpResponse('<h1> Tip Home</h1>')
 
 
+@login_required
+@csrf_protect
 def matchday(request, matchday_number):
     m_nr = int(matchday_number)
     if m_nr < 1 or m_nr > 7:
@@ -31,7 +35,7 @@ def matchday(request, matchday_number):
                 except:
                     raise Http404
                 # get input in {tipp : tipp} format
-                m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)')
+                m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
                 if m:
                     match = get_object_or_404(Match, pk=match_id)
                     if not match.has_started():
@@ -42,19 +46,20 @@ def matchday(request, matchday_number):
                         home_score = m.group('home_score')  # string in v vor :
                         guest_score = m.group('guest_score')  # string in v nach :
                         if tipp:
-                            tipp.date_posted = timezone.now()
-                            tipp.home_score = home_score
-                            tipp.guest_score = guest_score
+                            # fülle model falls tipp schon vorhanden
+                            tipp.date_posted = timezone.now
+                            tipp.tip_home = home_score
+                            tipp.tip_guest = guest_score
                         else:  # falls tipp nicht vorhanden erstelle neuen
                             tipp = Tip(
                                 author=User.objects.get(pk=request.user.pk),
                                 match=match,
-                                date=timezone.now(),
-                                home_score=home_score,
-                                guest_score=guest_score
+                                tip_date=timezone.now(),
+                                tip_home=home_score,
+                                tip_guest=guest_score
                             )
                         tipp.save()
-        return HttpResponseRedirect(reverse("matchplan", kwargs={'matchday_number': m_nr}))
+        return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
     match = Match.objects.filter(matchday=m_nr)
     tipps = Tip.objects.filter(author=request.user).filter(match__matchday=m_nr)
     tipps_by_matches = {t.match.pk: t for t in tipps}

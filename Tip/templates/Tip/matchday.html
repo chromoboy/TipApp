@@ -1,67 +1,19 @@
 {% extends "tip/base.html" %}
 {% block content %}
-
-
-{#<section data-role="content">#}
-{#    {% for match in match %}#}
-{#        <article class="media content-section">#}
-{#          <div class="media-body">#}
-{#            <div class="article-metadata">#}
-{#              <div class="row">#}
-{#                <div class="col">#}
-{#                    <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
-{#                </div>#}
-{#                <div class="col">#}
-{#                    <small class="text-muted">Ergebnis</small><br>#}
-{#                    <small class="text-muted">Tipp</small>#}
-{#                </div>#}
-{#                <div class="col">#}
-{#                  <small class="text-muted">Punkte</small>#}
-{#                </div>#}
-{#                <div class="col">#}
-{#                  <small class="text-muted">Punkte</small>#}
-{#                </div>#}
-{#              </div>#}
-{#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
-{#            </div>#}
-{#              <div class="row">#}
-{#        <div class="col">#}
-{#            <p class=>{{ match.home_team.team_name}}</p>#}
-{#        </div>#}
-{#        <div class="col">#}
-{#              {% if match.has_started %}#}
-{#              <p>{{ match.home_score }} : {{ match.guest_score }}</p>#}
-{#              {% else %}#}
-{#              <p>-:-</p>#}
-{#              {% endif %}#}
-{#        </div>#}
-{#        <div class="col">#}
-{#              <p>{{ match.guest_team.team_name}}</p>#}
-{#        </div>#}
-{#        <div class="col">#}
-{#              <p>0</p>#}
-{#        </div>#}
-{#      </div>#}
-{#          </div>#}
-{#        </article>#}
-{#    {%  endfor %}#}
-{#</section>#}
-{##}
-{#{% endblock content %}#}
+{% load i18n dicthelpers %}
 
 <section data-role="content">
-    <form action="{% url matchday number %}" method="post">
+    <form action="{% url 'tip-matchday' number %}" method="post">
     {% csrf_token %}
-    <ul data-role="listview">
-        {% for match in matches %}
+    <ul style="list-style: none;">
+        {% for match in match %}
         {% with tipp=tipps|lookup:match.pk %}
-{#            find tipp for match#}
         <li>
 {#            # schlau zeige entweder text feld für tipp eingabe, solange spiel noch nicht gestartet ist oder#}
             {% if match.has_started %}
-            {% include "tip/match/matchday_started.html" %}
+            {% include "tip/match/match_started.html" %}
             {% else %}
-            {% include "tip/match/matchday_not_started.html" %}
+            {% include "tip/match/match_not_started.html" %}
             {% endif %}
         </li>
         {% endwith %}

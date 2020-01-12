@@ -39,11 +39,14 @@ class Match(models.Model):
     def has_started(self):
         return self.match_date <= timezone.now() + timedelta(seconds=120)
 
+    # def current_matchday(self):
+    #     match = Match.objects.all().order_by('match_date')
+
 
 class Tip(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     match = models.ForeignKey(Match, on_delete=models.PROTECT)
-    date_posted = models.DateTimeField(default=timezone.now)
+    tip_date = models.DateTimeField(default=timezone.now)
     tip_home = models.IntegerField(default=-1)
     tip_guest = models.IntegerField(default=-1)
 
