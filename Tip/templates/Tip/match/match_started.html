@@ -7,17 +7,24 @@
             <div class="article-metadata">
               <div class="row">
                 <div class="col">
-                    <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>
+                  <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small><br>
+                  <small class="text-muted">Heim</small>
                 </div>
                 <div class="col">
-                    <small class="text-muted">Ergebnis</small><br>
-                    <small class="text-muted">Tipp</small>
+                  <small class="text-muted">Ergebnis</small><br>
+                  <small class="text-muted">Tipp</small>
                 </div>
                 <div class="col">
-{#                  <small class="text-muted">Punkte</small>#}
+                  <small class="text-muted"> </small><br>
+                  <small class="text-muted">Gast</small>
                 </div>
                 <div class="col">
+                  <small class="text-muted"> </small><br>
                   <small class="text-muted">Punkte</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"> </small><br>
+                  <small class="text-muted">Joker</small>
                 </div>
               </div>
 {#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
@@ -27,7 +34,7 @@
             <p class=>{{ match.home_team.team_name}}</p>
         </div>
         <div class="col">
-                        <p class="tippspiel_match_result">
+                        <p>
                                 {% if match.home_score == -1 or match.guest_score == -1 %}
                                 -:-
                                 {% else %}
@@ -36,7 +43,7 @@
                         </p>
                         <p class="tippspiel_tipp_result">
                                 {% if tipp %}
-                                {{ tipp.tip_home }}:{{ tipp.tip_guest }} ({{ tipp.points }})
+                                {{ tipp.tip_home }}:{{ tipp.tip_guest }} {{ tipp.points }})
                                 {% else %}
                                 -:- (0 {% trans "points" %})
                                 {% endif %}

@@ -5,12 +5,9 @@
     <section data-role="content">
     <ul data-role="listview" data-filter="true">
     {% for user in users %}
-        <li>
-{#        <li{% ifequal author.pk user.pk %} data-theme="e"{% endifequal %}><a href="{% url tippspiel_player_detail player_name=player.user.username %}">#}
-{#            {%  %}#}
-            <h3>{{ user.rank }}. {{ user.user.username }}</h3>
-            <span class="ui-li-count">{{ user.user.score }} {% trans "points" %}</span>
-{#        </a>#}
+        <li class="border-bottom mb-8">
+{#            <h3>{{ user.rank }}. {{ user.user.username }}</h3>#}
+            <span>{{ user.rank }}. {{ user.user.username }} {{ user.score }} {% trans "points" %}</span>
         </li>
     {% endfor %}
     </ul>

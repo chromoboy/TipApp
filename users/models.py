@@ -12,6 +12,8 @@ class Profile(models.Model):
     rank = models.IntegerField(default=0)
     champion = models.CharField(max_length=12, choices=TEST_CHOICES, default='spanien')
 
+    # jokers = models.IntegerField(default=0)
+
     def update_score(self):
         tipps = Tip.objects.filter(user=self)
         score = 0

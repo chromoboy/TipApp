@@ -29,8 +29,8 @@ class Team(models.Model):
 
 class Match(models.Model):
     # one team has many matches
-    home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE)
-    guest_team = models.ForeignKey(Team, related_name="guest_team", on_delete=models.CASCADE)
+    home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE, default="tba")
+    guest_team = models.ForeignKey(Team, related_name="guest_team", on_delete=models.CASCADE, default="tba")
     match_date = models.DateTimeField(default=timezone.now)
     matchday = models.IntegerField(default=0)
     guest_score = models.IntegerField(default=-1)
@@ -40,7 +40,9 @@ class Match(models.Model):
         return self.match_date <= timezone.now() + timedelta(seconds=120)
 
     # def current_matchday(self):
-    #     match = Match.objects.all().order_by('match_date')
+    #     next_matchday = self.objects.filter(match_date__gte=timezone.now() + timedelta(seconds=150 * 60))
+    #     print(next_matchday)
+    #     return next_matchday.values('matchday')
 
 
 class Tip(models.Model):
@@ -49,6 +51,7 @@ class Tip(models.Model):
     tip_date = models.DateTimeField(default=timezone.now)
     tip_home = models.IntegerField(default=-1)
     tip_guest = models.IntegerField(default=-1)
+    joker = models.BooleanField(default=0)
 
     def points(self):
         sh = self.match.home_score
@@ -72,7 +75,8 @@ class Tip(models.Model):
                     points += 1
         return points
 
-# TODO: Füge Teams als dict hinzu für dropdown menu bei registrierung.
-# TODO: Wie werden tipps und ergebnisse verrechnet?
+# TODO: Joker müssen noch eingesetzt werden. Wie wird die Anzahl an Jokern angegeben?
+# --> über funktion in user modell mit x = int(x == 'true') und matchday angabe, also n_joker = 3 für matchday 1,2,3
 # TODO: Wie werden überhaupt ergebnisse eingetragen? --> admin page
 # TODO: Weltmeister wird über dict mit tipps verglichen.
+# TODO: Vllt doch Weltmeister als Dropdown über Foreign Key auf Teams?

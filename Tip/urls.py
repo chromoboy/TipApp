@@ -11,17 +11,9 @@ urlpatterns = [
     path('matchday/<int:matchday_number>/', views.matchday, name='tip-matchday'),
     # gebe für rangliste queryset zurück, dass spieler nach punkten sortiert und als users zurückgibt
     path('ranking/', login_required(ListView.as_view(queryset=Profile.objects.order_by('-score', 'user__username'),
-                                                      context_object_name='users', template_name='Tip/ranking.html')),
+                                                     context_object_name='users', template_name='Tip/ranking.html')),
          name="tip-ranking"
          ),
+    path('form_test/', views.forms_test, name='form-test')
 ]
 
-# url(
-#     r'^ranking/$',
-#     login_required(ListView.as_view(
-#         queryset=Player.objects.order_by('-score', 'user__username'),
-#         context_object_name='players',
-#         template_name='tippspiel/player_list.html'
-#     )),
-#     name="tippspiel_player_list"
-# ),
