@@ -14,10 +14,6 @@ class Champion(models.Model):
     champion = models.CharField(max_length=10)
 
 
-# class Group(models.Model):
-#     group_name = models.CharField(max_length=1, default="", editable=False)
-
-
 class Team(models.Model):
     team_name = models.CharField(max_length=100)
     team_ccode = models.CharField(max_length=3)
@@ -38,11 +34,6 @@ class Match(models.Model):
 
     def has_started(self):
         return self.match_date <= timezone.now() + timedelta(seconds=120)
-
-    # def current_matchday(self):
-    #     next_matchday = self.objects.filter(match_date__gte=timezone.now() + timedelta(seconds=150 * 60))
-    #     print(next_matchday)
-    #     return next_matchday.values('matchday')
 
 
 class Tip(models.Model):

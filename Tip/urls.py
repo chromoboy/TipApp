@@ -14,6 +14,5 @@ urlpatterns = [
                                                      context_object_name='users', template_name='Tip/ranking.html')),
          name="tip-ranking"
          ),
-    path('form_test/', views.forms_test, name='form-test')
 ]
 

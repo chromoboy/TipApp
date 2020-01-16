@@ -43,9 +43,9 @@
                         </p>
                         <p class="tippspiel_tipp_result">
                                 {% if tipp %}
-                                {{ tipp.tip_home }}:{{ tipp.tip_guest }} {{ tipp.points }})
+                                {{ tipp.tip_home }}:{{ tipp.tip_guest }}
                                 {% else %}
-                                -:- (0 {% trans "points" %})
+                                -:-
                                 {% endif %}
                         </p>
         </div>
@@ -53,7 +53,11 @@
               <p>{{ match.guest_team.team_name}}</p>
         </div>
         <div class="col">
+              {%  if tipp %}
               <p>{{ tipp.points }}</p>
+              {% else %}
+              <p> 0 </p>
+              {% endif %}
         </div>
       </div>
           </div>

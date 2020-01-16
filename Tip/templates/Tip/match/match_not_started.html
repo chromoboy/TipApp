@@ -45,7 +45,12 @@
               <p>0</p>
         </div>
         <div class="col">
-              <input type="checkbox" class="" id="Joker-{{ match.id }}" name="Tipp-{{ match.id }}" value="Joker" />
+              {% if  tipp.joker  %}
+                  <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}" checked />
+              {% else %}
+                  <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}" />
+              {%  endif %}
+
         </div>
       </div>
           </div>
