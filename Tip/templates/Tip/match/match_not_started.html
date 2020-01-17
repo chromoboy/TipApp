@@ -10,8 +10,8 @@
                   <small class="text-muted">Heim</small>
                 </div>
                 <div class="col">
-                  <small class="text-muted">Ergebnis</small><br>
-                  <small class="text-muted">Tipp</small>
+                  <small class="text-muted">Tipp</small><br>
+                  <small class="text-muted">Ergebnis</small>
                 </div>
                 <div class="col">
                   <small class="text-muted"> </small><br>
@@ -19,40 +19,48 @@
                 </div>
                 <div class="col">
                   <small class="text-muted"> </small><br>
-                  <small class="text-muted">Punkte</small>
+                  <small class="text-muted">Joker</small>
                 </div>
                 <div class="col">
                   <small class="text-muted"> </small><br>
-                  <small class="text-muted">Joker</small>
+                  <small class="text-muted">Punkt</small>
                 </div>
               </div>
 {#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
             </div>
               <div class="row">
+
         <div class="col">
             <p class=>{{ match.home_team.team_name}}</p>
         </div>
+
         <div class="col">
             <input type="text" data-mini="true" class="tippspiel_tippfield" id="Tipp-{{ match.id }}"
                    name="Tipp-{{ match.id }}"
                    placeholder= "{% if tipp %} {{ tipp.tip_home }}:{{ tipp.tip_guest }} {% else %} -:- {% endif %}" />
+            <p>-:-</p>
 
         </div>
+
+
         <div class="col">
               <p>{{ match.guest_team.team_name}}</p>
         </div>
-        <div class="col">
-              <p>0</p>
-        </div>
-        <div class="col">
+
+         <div class="col">
               {% if  tipp.joker  %}
                   <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}" checked />
               {% else %}
                   <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}" />
               {%  endif %}
-
         </div>
+
+        <div class="col">
+              <p>0</p>
+        </div>
+
       </div>
+
           </div>
         </article>
 </section>

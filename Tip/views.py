@@ -41,8 +41,6 @@ def matchday(request, matchday_number):
                     # print(match_id)
                 except:
                     raise Http404
-                if not v:
-                    print('v nicht da')
                 # get input in {tipp : tipp} format
                 m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
                 match = get_object_or_404(Match, pk=match_id)
@@ -56,14 +54,14 @@ def matchday(request, matchday_number):
                             tipp = None
                         home_score = m.group('home_score')  # string in v vor :
                         guest_score = m.group('guest_score')  # string in v nach :
-                        print(home_score,":", guest_score)
+                        print(home_score, ":", guest_score)
                         if tipp:
                             # fülle model falls tipp schon vorhanden
                             tipp.date_posted = timezone.now
                             tipp.tip_home = home_score
                             tipp.tip_guest = guest_score
-
-                        else:  # falls tipp nicht vorhanden erstelle neuen
+                            # falls tipp nicht vorhanden erstelle neuen
+                        else:
                             tipp = Tip(
                                 author=User.objects.get(pk=request.user.pk),
                                 match=match,
@@ -72,14 +70,15 @@ def matchday(request, matchday_number):
                                 tip_guest=guest_score,
                             )
                         tipp.save()
-                        messages.success(request, 'Tipps gespeichert!')
                 # falls tipp schon vorhanden aber joker wird rausgenommen, dann ist k leer und joker als 0 gespeichert.
-                tipp = Tip.objects.get(author=request.user, match__id=match_id)
+                try:
+                    tipp = Tip.objects.get(author=request.user, match__id=match_id)
+                except:
+                    tipp = None
                 if tipp and not m:
                     tipp.joker = 0
                     tipp.save()
             elif k.startswith('Joker-'):
-                print('Tipp izz da')
                 try:
                     match_id = int(k.strip('Joker-'))
                     print(match_id)
@@ -94,8 +93,8 @@ def matchday(request, matchday_number):
                     print(tipp)
                     tipp.joker = 1
                     tipp.save()
-                    messages.success(request, 'Joker gespeichert!')
 
+        messages.success(request, 'Gespeichert!')
         return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
 
     match = Match.objects.filter(matchday=m_nr)
@@ -111,3 +110,8 @@ def matchday(request, matchday_number):
 
 def about(request):
     return render(request, 'tip/about.html', {'title': 'about'})  # add title by hand
+
+#
+# def tipp_number(user, ):
+
+
