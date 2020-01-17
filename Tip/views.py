@@ -25,6 +25,7 @@ def home(request):
 @csrf_protect
 def matchday(request, matchday_number):
     m_nr = int(matchday_number)
+    number_joker = 0  # checke anzahl an jokern
     if m_nr < 1 or m_nr > 7:
         # testing
         if m_nr != 0:
@@ -54,7 +55,6 @@ def matchday(request, matchday_number):
                             tipp = None
                         home_score = m.group('home_score')  # string in v vor :
                         guest_score = m.group('guest_score')  # string in v nach :
-                        print(home_score, ":", guest_score)
                         if tipp:
                             # fülle model falls tipp schon vorhanden
                             tipp.date_posted = timezone.now
@@ -75,9 +75,9 @@ def matchday(request, matchday_number):
                     tipp = Tip.objects.get(author=request.user, match__id=match_id)
                 except:
                     tipp = None
-                if tipp and not m:
-                    tipp.joker = 0
-                    tipp.save()
+                    if tipp and not m:
+                        tipp.joker = 0
+                        tipp.save()
             elif k.startswith('Joker-'):
                 try:
                     match_id = int(k.strip('Joker-'))
@@ -90,9 +90,12 @@ def matchday(request, matchday_number):
                         tipp = Tip.objects.get(author=request.user, match__id=match_id)
                     except:
                         tipp = None
-                    print(tipp)
-                    tipp.joker = 1
-                    tipp.save()
+                    number_joker += 1
+                    print('joker im spieltag', number_joker)
+                    if joker_valid(matchday_number, number_joker) and tipp:
+                        tipp.joker = 1
+                        tipp.save()
+                        messages.debug(request, 'Zu viele Joker gesetzt! Anzahl Joker: ' + str(number_joker))
 
         messages.success(request, 'Gespeichert!')
         return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
@@ -111,7 +114,14 @@ def matchday(request, matchday_number):
 def about(request):
     return render(request, 'tip/about.html', {'title': 'about'})  # add title by hand
 
-#
-# def tipp_number(user, ):
 
+def joker_valid(matchday_in, n_joker):
+    """
 
+    :param matchday_in: matchday da anzahl joker sich hier unterscheidet
+    :param n_joker: anzahl joker
+    :return: sind zu viele joker gesetzt? erstmal nur vorrunde
+    """
+    if matchday_in < 3 and n_joker > 3:
+        return 0
+    return 1
