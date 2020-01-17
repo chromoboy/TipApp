@@ -24,14 +24,13 @@ def home(request):
 @login_required
 @csrf_protect
 def matchday(request, matchday_number):
-    m_nr = int(matchday_number)
+    m_nr: int = int(matchday_number)
     number_joker = 0  # checke anzahl an jokern
     if m_nr < 1 or m_nr > 7:
         # testing
         if m_nr != 0:
             raise Http404
     if request.method == 'POST':
-        print('POST!!!')
         for k, v in request.POST.items():  # k id zu tipp post, v tipps
             # print(request.POST.items())
             print('k:', k)
@@ -45,7 +44,6 @@ def matchday(request, matchday_number):
                 # get input in {tipp : tipp} format
                 m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
                 match = get_object_or_404(Match, pk=match_id)
-                print("m:", m)
                 if m:
                     # match = get_object_or_404(Match, pk=match_id)
                     if not match.has_started():
@@ -75,28 +73,28 @@ def matchday(request, matchday_number):
                     tipp = Tip.objects.get(author=request.user, match__id=match_id)
                 except:
                     tipp = None
-                    if tipp and not m:
-                        tipp.joker = 0
-                        tipp.save()
+                if tipp:
+                    tipp.joker = 0
+                    tipp.save()
             elif k.startswith('Joker-'):
                 try:
                     match_id = int(k.strip('Joker-'))
-                    print(match_id)
                 except:
                     raise Http404
                 match = get_object_or_404(Match, pk=match_id)
                 if not match.has_started():
+                    # tipp muss existieren sonst fehler
                     try:
                         tipp = Tip.objects.get(author=request.user, match__id=match_id)
                     except:
                         tipp = None
                     number_joker += 1
-                    print('joker im spieltag', number_joker)
-                    if joker_valid(matchday_number, number_joker) and tipp:
+                    # zu viele joker?
+                    if joker_valid(m_nr, number_joker) == 1 and tipp:
                         tipp.joker = 1
                         tipp.save()
-                        messages.debug(request, 'Zu viele Joker gesetzt! Anzahl Joker: ' + str(number_joker))
-
+                    elif not joker_valid(m_nr, number_joker):
+                        messages.warning(request, 'Zu viele Joker gesetzt! Anzahl Joker: %s' %number_joker)
         messages.success(request, 'Gespeichert!')
         return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
 

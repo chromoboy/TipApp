@@ -5,24 +5,23 @@
 <section data-role="content">
     <form action="{% url 'tip-matchday' number %}" method="post">
     {% csrf_token %}
-    <ul style="list-style: none;">
+    <div>
         {% for match in match %}
         {% with tipp=tipps|lookup:match.pk %}
-        <li>
+        <div>
 {#            # schlau zeige entweder text feld für tipp eingabe, solange spiel noch nicht gestartet ist oder#}
             {% if match.has_started %}
             {% include "tip/match/match_started.html" %}
             {% else %}
             {% include "tip/match/match_not_started.html" %}
             {% endif %}
-        </li>
+        </div>
         {% endwith %}
         {% endfor %}
-        <li>
-            <button type="submit" class="btn btn-outline-success"
-                    style="position:relative; top:25px; left: 50%;">{% trans "Save" %}</button>
-        </li>
-    </ul>
+
+        <button type="submit" class="btn btn-outline-success">{% trans "Save" %}</button>
+    </div>
+{#    style="position:relative; top:25px; left: 50%;"#}
     </form>
 </section>
 {% endblock %}
