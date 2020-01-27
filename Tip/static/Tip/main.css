@@ -20,13 +20,20 @@ ul {
     color: #cbd5db;
 }
 
+.dropdown{
+    /*show;*/
+    color: #cbd5db;
+}
+
 .site-header .navbar-nav .nav-link:hover {
     color: #ffffff;
 }
 
 .site-header .navbar-nav .nav-link.active {
     font-weight: 500;
+    background-color: green;
 }
+
 
 .tippspiel_match_result {
     color: #ffffff;

@@ -2,16 +2,63 @@
 {% block content %}
 {% load i18n dicthelpers %}
 
-    <section data-role="content">
-    <ul data-role="listview" data-filter="true">
-    {% for user in users %}
-        <li class="border-bottom mb-8">
-{#            <h3>{{ user.rank }}. {{ user.user.username }}</h3>#}
-            <span>{{ user.rank }}. {{ user.user.username }} {{ user.score }} {% trans "points" %}</span>
-        </li>
-    {% endfor %}
-    </ul>
-</section>
 
+
+{#    <section data-role="content">#}
+{#    <ul data-role="listview" data-filter="true">#}
+{#    {% for user in users %}#}
+{#        <li class="border-bottom mb-8 border-top mb-8">#}
+{#            <h3>{{ user.rank }}. {{ user.user.username }}</h3>#}
+{#            <span> {{ user.image }}{{ user.rank }}. {{ user.user.username }} {{ user.score }} {% trans "points" %}</span>#}
+{##}
+{#        </li>#}
+{#    {% endfor %}#}
+{#    </ul>#}
+{#</section>#}
+
+
+    <section data-role="content">
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <div class="row">
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Rang</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Name</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted">Joker</small><br>
+                  <small class="text-muted">gesetzt</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Punkte</small>
+                </div>
+              </div>
+{#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
+            </div>
+              {% for user in users %}
+              <div class="row">
+                      <div class="col">
+                        <p class=>{{ user.rank }}.</p>
+                      </div>
+                      <div class="col">
+                        <p class=>{{ user.user.username }}</p>
+                      </div>
+                      <div class="col">
+                        <p class=>{{ user.score }}</p>
+                      </div>
+                      <div class="col">
+                        <p class=>{{ user.score }}</p>
+                      </div>
+               </div>
+              {%  endfor %}
+          </div>
+        </article>
+</section>
 
 {% endblock %}

@@ -11,7 +11,7 @@ TEST_CHOICES = [
 
 
 class Champion(models.Model):
-    champion = models.CharField(max_length=10)
+    champion = models.CharField(max_length=100)
 
 
 class Team(models.Model):
@@ -33,7 +33,10 @@ class Match(models.Model):
     home_score = models.IntegerField(default=-1)
 
     def has_started(self):
-        return self.match_date <= timezone.now() + timedelta(seconds=120)
+        return self.match_date <= timezone.now() - timedelta(seconds=60)
+
+    def has_finished(self):
+        return timezone.now() >= self.match_date + timedelta(minutes=720)
 
 
 class Tip(models.Model):
@@ -55,6 +58,7 @@ class Tip(models.Model):
         points = 0
         ds = sh - sg
         dt = th - tg
+
         if sgn(ds) == sgn(dt):
             # correct tendency
             points += 1
@@ -64,7 +68,23 @@ class Tip(models.Model):
                 if sh == th:
                     # correct result
                     points += 1
+        if self.joker:
+            points *= self.joker_multiplier()
         return points
+
+    def joker_multiplier(self):
+        """
+        :return: gibt joker faktor zurück. Vergabe Richtig?
+        """
+        if self.match.matchday < 3:
+            return 2
+        if self.match.matchday < 5:
+            return 3
+        if self.match.matchday < 7:
+            return 4
+        return 1
+    # joker immer mal 2
+
 
 # TODO: Joker müssen noch eingesetzt werden. Wie wird die Anzahl an Jokern angegeben?
 # --> über funktion in user modell mit x = int(x == 'true') und matchday angabe, also n_joker = 3 für matchday 1,2,3

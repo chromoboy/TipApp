@@ -1,3 +1,4 @@
+from django.utils import timezone
 from . import views
 from django.urls import path
 from .models import Team, Match, Tip
@@ -14,5 +15,8 @@ urlpatterns = [
                                                      context_object_name='users', template_name='Tip/ranking.html')),
          name="tip-ranking"
          ),
-]
+    path('settings/<int:matchday_number>/', views.settings, name='tip-settings'),
+    path('update_score_and_ranks/', views.update_scores_and_ranks, name='tip-settings-update'),
+    ]
+
 

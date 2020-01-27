@@ -1,9 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Tip.models import Team, Tip
+from Tip.models import Team, Tip, Match
 from PIL import Image
 from Tip.models import TEST_CHOICES
 
+TEST_CHOICES = [
+    ('10', 'Deutschland'),
+    ('20', 'Spanien'),
+    ('20', 'England'),
+]
+# match = Match.objects.filter(matchday=m_nr).
+# team_name = Team.objects.filter('team_name')
+# print(team_name)
+# d = {k: v for k, v in zip(Team.objects.filter(team_name), Team.team_ccode)}
+# print(d)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -15,7 +25,8 @@ class Profile(models.Model):
     # jokers = models.IntegerField(default=0)
 
     def update_score(self):
-        tipps = Tip.objects.filter(user=self)
+
+        tipps = Tip.objects.filter(author=self.user_id)
         score = 0
         for tipp in tipps:
             score += tipp.points()

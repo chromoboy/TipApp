@@ -1,5 +1,9 @@
+from django.utils import timezone
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
+
+from Tip.models import Match
 from .forms import UserRegisterForm
 from .forms import UserUpdateForm
 from .forms import ProfileUpdateForm
@@ -22,6 +26,8 @@ def register(request):
 
 
 def profile(request):
+    current_matchday = Match.objects.filter(match_date__gte
+                                            =timezone.now()).order_by('match_date')[0].matchday
     if request.method == 'POST':
         # gets post and files from current request
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -41,6 +47,7 @@ def profile(request):
     context = {
         'u_form': u_form,
         'p_form': p_form,
+        'c_mday': current_matchday
     }
     # pass context to template
     return render(request, 'users/profile.html', context)

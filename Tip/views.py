@@ -1,9 +1,10 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.checks import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect
-from users.models import User
+from users.models import User, Profile
 from .models import Match, Team, Tip
 from django.http import Http404, HttpResponseRedirect
 import re
@@ -12,10 +13,13 @@ from django.contrib import messages
 
 
 def home(request):
+    current_matchday = Match.objects.filter(match_date__gte
+                                            =timezone.now()).order_by('match_date')[0].matchday
     context = {
         'tip': Tip.objects.all(),
         'match': Match.objects.all(),
         'team': Team.objects.all(),
+        # 'c_mday': current_matchday,
     }
     return render(request, 'tip/home.html', context)  # make tip accessible for request
     # HttpResponse('<h1> Tip Home</h1>')
@@ -25,7 +29,7 @@ def home(request):
 @csrf_protect
 def matchday(request, matchday_number):
     m_nr: int = int(matchday_number)
-    number_joker = 0  # checke anzahl an jokern
+    # checke anzahl an jokern
     if m_nr < 1 or m_nr > 7:
         # testing
         if m_nr != 0:
@@ -35,6 +39,7 @@ def matchday(request, matchday_number):
             # print(request.POST.items())
             print('k:', k)
             print('v:', v)
+            m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
             if k.startswith('Tipp-'):
                 try:
                     match_id = int(k.strip('Tipp-'))  # Tipp id started mit "Tipp-" + id
@@ -42,7 +47,7 @@ def matchday(request, matchday_number):
                 except:
                     raise Http404
                 # get input in {tipp : tipp} format
-                m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
+                # m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
                 match = get_object_or_404(Match, pk=match_id)
                 if m:
                     # match = get_object_or_404(Match, pk=match_id)
@@ -68,7 +73,8 @@ def matchday(request, matchday_number):
                                 tip_guest=guest_score,
                             )
                         tipp.save()
-                # falls tipp schon vorhanden aber joker wird rausgenommen, dann ist k leer und joker als 0 gespeichert.
+                # falls tipp schon vorhanden aber joker wird rausgenommen,
+                # dann ist k leer und joker nicht gespeichert.
                 try:
                     tipp = Tip.objects.get(author=request.user, match__id=match_id)
                 except:
@@ -88,38 +94,114 @@ def matchday(request, matchday_number):
                         tipp = Tip.objects.get(author=request.user, match__id=match_id)
                     except:
                         tipp = None
-                    number_joker += 1
+
+                    print('number_joker: ', get_n_joker)
+                    print('tipp: ', tipp)
+                    # print(tipp.match.guest_team.team_name, tipp.match.home_team.team_name)
                     # zu viele joker?
-                    if joker_valid(m_nr, number_joker) == 1 and tipp:
+                    if is_joker_valid(m_nr, get_n_joker(request, m_nr)) and tipp:
+                        print('hihihi')
                         tipp.joker = 1
                         tipp.save()
-                    elif not joker_valid(m_nr, number_joker):
-                        messages.warning(request, 'Zu viele Joker gesetzt! Anzahl Joker: %s' %number_joker)
-        messages.success(request, 'Gespeichert!')
+                    elif not is_joker_valid(m_nr, get_n_joker(request, m_nr)):
+                        print('huhuhu')
+                        messages.warning(request, 'Zu viele Joker gesetzt! Anzahl Joker:'
+                                         + str(get_n_joker(request, m_nr)))
         return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
 
-    match = Match.objects.filter(matchday=m_nr)
+    match = Match.objects.filter(matchday=m_nr).order_by('match_date')
+
     tipps = Tip.objects.filter(author=request.user).filter(match__matchday=m_nr)
     tipps_by_matches = {t.match.pk: t for t in tipps}
+    current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday
     context = {
         'number': m_nr,
         'match': match,
         'tipps': tipps_by_matches,
+        'c_mday': current_matchday,
     }
     return render(request, 'tip/matchday.html', context)
+
+
+def is_joker_valid(matchday_in, njoker):
+    if matchday_in < 3 and njoker >= 3:
+        return False
+    return True
+
+
+def get_n_joker(request, m_nr):
+    tipps = Tip.objects.filter(author=request.user).filter(match__matchday=m_nr)
+    n_jokes = 0
+    for tipp in tipps:
+        if tipp.joker:
+            n_jokes += 1
+    return n_jokes
 
 
 def about(request):
     return render(request, 'tip/about.html', {'title': 'about'})  # add title by hand
 
 
-def joker_valid(matchday_in, n_joker):
-    """
+@staff_member_required
+def update_scores_and_ranks(request):
+    for user in Profile.objects.all():
+        user.update_score()
+        user.save()
 
-    :param matchday_in: matchday da anzahl joker sich hier unterscheidet
-    :param n_joker: anzahl joker
-    :return: sind zu viele joker gesetzt? erstmal nur vorrunde
-    """
-    if matchday_in < 3 and n_joker > 3:
-        return 0
-    return 1
+    # update ranks
+    users = Profile.objects.all().order_by('score').reverse()
+    rank, tick, score = 1, 0, users[0].score
+    for user in users:
+        if user.score < score:
+            rank += tick
+            tick = 1
+            score = user.score
+        else:
+            tick += 1
+        if user.rank != rank:
+            user.rank = rank
+            user.save()
+    current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday
+    print(current_matchday)
+    return HttpResponseRedirect(reverse('tip-settings', kwargs={'matchday_number': current_matchday}))
+
+
+@staff_member_required
+def settings(request, matchday_number):
+    m_nr = int(matchday_number)
+    current_matchday = Match.objects.filter(match_date__gte
+                                            =timezone.now()).order_by('match_date')[0].matchday
+    if request.method == 'POST':
+        for k, v in request.POST.items():  # k id zu tipp post, v tipps
+            # print(request.POST.items())
+            print('k:', k)
+            print('v:', v)
+            if k.startswith('Match-'):
+                try:
+                    match_id = int(k.strip('Match-'))  # Tipp id started mit "Tipp-" + id
+                    print(match_id)
+                except:
+                    raise Http404
+                m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
+                match = get_object_or_404(Match, pk=match_id)
+                print('m', m)
+                # match = get_object_or_404(Match, pk=match_id)
+                if m:
+                    home_score = m.group('home_score')
+                    guest_score = m.group('guest_score')
+                    if match.has_started():
+                        match.home_score = home_score
+                        match.guest_score = guest_score
+                        print('score:', home_score, guest_score)
+                        match.save()
+        messages.success(request, 'Gespeichert!')
+        return HttpResponseRedirect(reverse('tip-settings', kwargs={'matchday_number': current_matchday}))
+
+    matches = Match.objects.filter(matchday=m_nr)
+    matches = matches.order_by('match_date')
+    context = {
+        'matches': matches,
+        'number': m_nr,
+        'c_mday': current_matchday,
+    }
+    return render(request, 'tip/settings.html', context)
