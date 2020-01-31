@@ -29,12 +29,16 @@
         </div>
 
         <div class="col">
-        {% if match.has_finished %}
+        {% if user.is_staff %}
             <input type="text" data-mini="true" class="tippspiel_tippfield" id="Match-{{ match.id }}"
                    name="Match-{{ match.id }}"
                    placeholder= "{% if match.home_score or match.guest_score %} {{ match.home_score}}:{{ match.guest_score}} {% else %} -:- {% endif %}" />
+        {% elif not match.has_started %}
+             <input type="text" data-mini="true" class="tippspiel_tippfield" id="Match-{{ match.id }}"
+                   name="Match-{{ match.id }}"
+                   placeholder= "{% if match.home_score or match.guest_score %} {{ match.home_score}}:{{ match.guest_score}} {% else %} -:- {% endif %}" />
         {% else %}
-            <p>-:-</p>
+            <p>{% if match.home_score or match.guest_score %} {{ match.home_score}}:{{ match.guest_score}} {% else %} -:- {% endif %}</p>
         {%  endif %}
         </div>
 

@@ -27,16 +27,24 @@
                   <small class="text-muted">Rang</small>
                 </div>
                 <div class="col">
+{#                  <small class="text-muted"></small><br>#}
+{#                  <small class="text-muted"></small>#}
+                </div>
+                <div class="col">
                   <small class="text-muted"></small><br>
                   <small class="text-muted">Name</small>
                 </div>
                 <div class="col">
-                  <small class="text-muted">Joker</small><br>
-                  <small class="text-muted">gesetzt</small>
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Joker</small>
                 </div>
                 <div class="col">
                   <small class="text-muted"></small><br>
                   <small class="text-muted">Punkte</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Champion</small>
                 </div>
               </div>
 {#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
@@ -44,17 +52,28 @@
               {% for user in users %}
               <div class="row">
                       <div class="col">
-                        <p class=>{{ user.rank }}.</p>
+                        <p class=align-right>{{ user.rank }}.</p>
                       </div>
                       <div class="col">
-                        <p class=>{{ user.user.username }}</p>
+                        <img class="rounded-circle" width="60" height="60" border="1px" src="{{ user.image.url }}">
                       </div>
                       <div class="col">
-                        <p class=>{{ user.score }}</p>
+                        <p class="align-right" >{{ user.user.username }}<br/></p>
                       </div>
                       <div class="col">
-                        <p class=>{{ user.score }}</p>
+                        <p class="align-right">{{ user.joker }}</p>
                       </div>
+                      <div class="col">
+                        <p class="align-right">{{ user.score }}</p>
+                      </div>
+                      <div class="col">
+                        <p class="align-right">{{ user.champion }}</p>
+                      </div>
+               </div>
+               <div class="row">
+               <p>
+
+               </p>
                </div>
               {%  endfor %}
           </div>

@@ -1,35 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Tip.models import Team, Tip, Match
+from Tip.models import Team, Tip, Match, Champion
 from PIL import Image
-from Tip.models import TEST_CHOICES
 
-TEST_CHOICES = [
-    ('10', 'Deutschland'),
-    ('20', 'Spanien'),
-    ('20', 'England'),
-]
-# match = Match.objects.filter(matchday=m_nr).
-# team_name = Team.objects.filter('team_name')
-# print(team_name)
-# d = {k: v for k, v in zip(Team.objects.filter(team_name), Team.team_ccode)}
-# print(d)
+champion_choices = [(team.team_ccode, team.team_name) for team in Team.objects.all()]
+champion_choices.append([('---'), ('---')])
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     score = models.IntegerField(default=0)
     rank = models.IntegerField(default=0)
-    champion = models.CharField(max_length=12, choices=TEST_CHOICES, default='spanien')
+    user_champion = models.CharField(max_length=12, choices=champion_choices, default='----')
+    joker = models.IntegerField(default=0)
 
-    # jokers = models.IntegerField(default=0)
-
-    def update_score(self):
+    # überschreibe joker und tipps
+    def update_score_and_joker(self):
 
         tipps = Tip.objects.filter(author=self.user_id)
         score = 0
+        joker = 0
         for tipp in tipps:
             score += tipp.points()
+            if tipp.joker:
+                joker += 1
+        self.joker = joker
         self.score = score
 
     def __str__(self):

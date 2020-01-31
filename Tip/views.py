@@ -5,7 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect
 from users.models import User, Profile
-from .models import Match, Team, Tip
+from .models import Match, Team, Tip, Champion
+from users.models import Profile
 from django.http import Http404, HttpResponseRedirect
 import re
 from django.utils import timezone
@@ -28,6 +29,8 @@ def home(request):
 @login_required
 @csrf_protect
 def matchday(request, matchday_number):
+    author_profile = Profile.objects.get(user=request.user)
+    print('author_profil', author_profile)
     m_nr: int = int(matchday_number)
     # checke anzahl an jokern
     if m_nr < 1 or m_nr > 7:
@@ -95,10 +98,8 @@ def matchday(request, matchday_number):
                     except:
                         tipp = None
 
-                    print('number_joker: ', get_n_joker)
+                    print('number_joker: ', get_n_joker(request, m_nr))
                     print('tipp: ', tipp)
-                    # print(tipp.match.guest_team.team_name, tipp.match.home_team.team_name)
-                    # zu viele joker?
                     if is_joker_valid(m_nr, get_n_joker(request, m_nr)) and tipp:
                         print('hihihi')
                         tipp.joker = 1
@@ -142,10 +143,11 @@ def about(request):
     return render(request, 'tip/about.html', {'title': 'about'})  # add title by hand
 
 
-@staff_member_required
+@login_required
+@csrf_protect
 def update_scores_and_ranks(request):
     for user in Profile.objects.all():
-        user.update_score()
+        user.update_score_and_joker()
         user.save()
 
     # update ranks
@@ -166,7 +168,8 @@ def update_scores_and_ranks(request):
     return HttpResponseRedirect(reverse('tip-settings', kwargs={'matchday_number': current_matchday}))
 
 
-@staff_member_required
+@login_required
+@csrf_protect
 def settings(request, matchday_number):
     m_nr = int(matchday_number)
     current_matchday = Match.objects.filter(match_date__gte
@@ -174,8 +177,8 @@ def settings(request, matchday_number):
     if request.method == 'POST':
         for k, v in request.POST.items():  # k id zu tipp post, v tipps
             # print(request.POST.items())
-            print('k:', k)
-            print('v:', v)
+            print('k_joker:', k)
+            print('v_joker:', v)
             if k.startswith('Match-'):
                 try:
                     match_id = int(k.strip('Match-'))  # Tipp id started mit "Tipp-" + id
@@ -205,3 +208,28 @@ def settings(request, matchday_number):
         'c_mday': current_matchday,
     }
     return render(request, 'tip/settings.html', context)
+
+
+def champion(request):
+    if request.method == 'POST':
+        for k, v in request.POST.items():
+            print('k_champion:', k)
+            print('v_champion:', v)
+            if k.startswith('Champion-'):
+                try:
+                    champion_id = int(k.strip('Champion-'))  # Tipp id started mit "Tipp-" + id
+                    print(champion_id)
+                except:
+                    raise Http404
+                champion = Champion.objects.get(champion__id=champion_id)
+                champion.out = 1
+                champion.save()
+        messages.success(request, 'Gespeichert!')
+        return HttpResponseRedirect(reverse('tip-champion'))
+    champions = Champion.objects.all()
+    context = {
+        'champions': champions,
+    }
+    print(champions)
+    return render(request, 'tip/settings/champion.html', context)
+

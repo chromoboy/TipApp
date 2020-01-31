@@ -3,16 +3,6 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import User
 
-TEST_CHOICES = [
-    ('GER', 'Deutschland'),
-    ('ESP', 'Spanien'),
-    ('ENG', 'England'),
-]
-
-
-class Champion(models.Model):
-    champion = models.CharField(max_length=100)
-
 
 class Team(models.Model):
     team_name = models.CharField(max_length=100)
@@ -35,8 +25,8 @@ class Match(models.Model):
     def has_started(self):
         return self.match_date <= timezone.now() - timedelta(seconds=60)
 
-    def has_finished(self):
-        return timezone.now() >= self.match_date + timedelta(minutes=720)
+    # def has_finished(self):
+    #     return timezone.now() >= self.match_date + timedelta(minutes=150)
 
 
 class Tip(models.Model):
@@ -79,15 +69,27 @@ class Tip(models.Model):
         if self.match.matchday < 3:
             return 2
         if self.match.matchday < 5:
-            return 3
-        if self.match.matchday < 7:
             return 4
+        if self.match.matchday < 7:
+            return 6
         return 1
-    # joker immer mal 2
 
 
-# TODO: Joker müssen noch eingesetzt werden. Wie wird die Anzahl an Jokern angegeben?
-# --> über funktion in user modell mit x = int(x == 'true') und matchday angabe, also n_joker = 3 für matchday 1,2,3
-# TODO: Wie werden überhaupt ergebnisse eingetragen? --> admin page
-# TODO: Weltmeister wird über dict mit tipps verglichen.
-# TODO: Vllt doch Weltmeister als Dropdown über Foreign Key auf Teams?
+class Champion(models.Model):
+    champion = models.ForeignKey(Team, related_name="champion", max_length=100, on_delete=models.CASCADE)
+    points = models.IntegerField(default=30)
+    out = models.BooleanField(default=0)
+
+    # print(champion_choices)
+    # def champion_list(self):
+    #     champion_choices = [(team.team_ccode, team.team_name) for team in Team.objects.all()]
+    #     champion_choices.append([('---'), ('---')])
+    #     return champion_choices
+
+    def __str__(self):
+        return self.champion.team_name
+
+# TODO: Defualt Wert für Champion auf --- setzen sobald gesetzt änderung nicht mehr mögloch
+# TODO: view für admin-champion bauen --> wenn draußen ranking zeigt das team nicht mehr
+# TODO: view für alle spiele bauen
+# TODO: about und start kombinieren tabelle erst nach login zeigen.
