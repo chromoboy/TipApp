@@ -76,9 +76,9 @@ class Tip(models.Model):
 
 
 class Champion(models.Model):
-    champion = models.ForeignKey(Team, related_name="champion", max_length=100, on_delete=models.CASCADE)
+    champion = models.ForeignKey(Team, max_length=100, on_delete=models.CASCADE)
     points = models.IntegerField(default=30)
-    out = models.BooleanField(default=0)
+    eliminated = models.BooleanField(default=0)
 
     # print(champion_choices)
     # def champion_list(self):
@@ -89,7 +89,9 @@ class Champion(models.Model):
     def __str__(self):
         return self.champion.team_name
 
-# TODO: Defualt Wert für Champion auf --- setzen sobald gesetzt änderung nicht mehr mögloch
-# TODO: view für admin-champion bauen --> wenn draußen ranking zeigt das team nicht mehr
+# TODO: Default Wert für Champion auf --- setzen sobald gesetzt änderung nicht mehr mögloch
+# (TODO: view für admin-champion bauen --> wenn draußen ranking zeigt das team nicht mehr)
 # TODO: view für alle spiele bauen
-# TODO: about und start kombinieren tabelle erst nach login zeigen.
+# TODO: start page schauen
+# TODO: Punkte anpassen
+# TODO: zeige spieler die nächstes spiel nicht getippt haben und sende mail: https://docs.djangoproject.com/en/3.0/topics/email/

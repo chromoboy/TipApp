@@ -33,7 +33,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="{% url 'tip-about' %}">About</a>
+{#                        <a class="nav-item nav-link" href="{% url 'tip-about' %}">About</a>#}
                         <a class="nav-item nav-link" href="{% url 'tip-ranking' %}">Ranking</a>
 
                       <div class="dropdown">
@@ -67,6 +67,9 @@
                     </div>
 
                      {% endif %}
+                     {% if user.is_staff %}
+                       <a class="nav-item nav-link" href="{% url 'tip-champion' %}">Champions</a>
+                     {%  endif %}
 {#                        <a class="nav-item nav-link" href="{% url 'tip-matchday' matchday_number= %}">Matchplan</a>#}
                     </div>
                     <!-- Navbar Right Side -->

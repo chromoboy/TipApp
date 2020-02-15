@@ -1,21 +1,21 @@
 {% extends "tip/base.html" %}
 {% block content %}
-    {% for tip in tip %}
+{#    {% for tip in tip %}#}
 {#        loop durch Tip.objects.all() #}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ tip.author }}</a>
-              <small class="text-muted">{{ tip.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="#">{{ tip.match.id }}</a></h2>
-            <p class="article-content">{{ tip.tip }}</p>
-              {%  for match in match   %}
+{#        <article class="media content-section">#}
+{#          <div class="media-body">#}
+{#            <div class="article-metadata">#}
+{#              <a class="mr-2" href="#">{{ tip.author }}</a>#}
+{#              <small class="text-muted">{{ tip.date_posted|date:"F d, Y" }}</small>#}
+{#            </div>#}
+{#            <h2><a class="article-title" href="#">{{ tip.match.id }}</a></h2>#}
+{#            <p class="article-content">{{ tip.tip }}</p>#}
+{#              {%  for match in match   %}#}
 {#                  loop durch match := Match.object.all() definiert in view#}
-                  <p class="article-content">{{ match }} </p>
-              {% endfor %}
-          </div>
-        </article>
-    {% endfor %}
+{#                  <p class="article-content">{{ match }} </p>#}
+{#              {% endfor %}#}
+{#          </div>#}
+{#        </article>#}
+{#    {% endfor %}#}
 {% endblock content %}
 {#curly brakets for variables#}

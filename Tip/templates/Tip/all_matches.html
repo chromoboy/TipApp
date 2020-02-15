@@ -1,0 +1,27 @@
+{% extends "tip/base.html" %}
+{% block content %}
+{% load i18n dicthelpers %}
+
+<section data-role="content">
+    <form action="{% url 'tip-all-matches' %}" method="post">
+    {% csrf_token %}
+    <div>
+        {% for match in match %}
+        {% with tipp=tipps|lookup:match.pk %}
+        <div>
+{#            # schlau zeige entweder text feld für tipp eingabe, solange spiel noch nicht gestartet ist oder#}
+            {% if match.has_started %}
+            {% include "tip/match/match_started.html" %}
+            {% else %}
+            {% include "tip/match/match_not_started.html" %}
+            {% endif %}
+        </div>
+        {% endwith %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-outline-success mb-4">{% trans "Save" %}</button>
+    </div>
+{#    style="position:relative; top:25px; left: 50%;"#}
+    </form>
+</section>
+{% endblock %}

@@ -14,8 +14,9 @@ from django.contrib import messages
 
 
 def home(request):
-    current_matchday = Match.objects.filter(match_date__gte
-                                            =timezone.now()).order_by('match_date')[0].matchday
+    # current_matchday = Match.objects.filter(match_date__gte
+    #                                         =timezone.now()).order_by('match_date')[0].matchday
+    #
     context = {
         'tip': Tip.objects.all(),
         'match': Match.objects.all(),
@@ -66,6 +67,7 @@ def matchday(request, matchday_number):
                             tipp.date_posted = timezone.now
                             tipp.tip_home = home_score
                             tipp.tip_guest = guest_score
+                            tipp.save()
                             # falls tipp nicht vorhanden erstelle neuen
                         else:
                             tipp = Tip(
@@ -75,7 +77,7 @@ def matchday(request, matchday_number):
                                 tip_home=home_score,
                                 tip_guest=guest_score,
                             )
-                        tipp.save()
+                            tipp.save()
                 # falls tipp schon vorhanden aber joker wird rausgenommen,
                 # dann ist k leer und joker nicht gespeichert.
                 try:
@@ -84,6 +86,7 @@ def matchday(request, matchday_number):
                     tipp = None
                 if tipp:
                     tipp.joker = 0
+                    tipp.tip_date = timezone.now()
                     tipp.save()
             elif k.startswith('Joker-'):
                 try:
@@ -114,12 +117,12 @@ def matchday(request, matchday_number):
 
     tipps = Tip.objects.filter(author=request.user).filter(match__matchday=m_nr)
     tipps_by_matches = {t.match.pk: t for t in tipps}
-    current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday
+    # current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday
     context = {
         'number': m_nr,
         'match': match,
         'tipps': tipps_by_matches,
-        'c_mday': current_matchday,
+        # 'c_mday': current_matchday,
     }
     return render(request, 'tip/matchday.html', context)
 
@@ -139,8 +142,98 @@ def get_n_joker(request, m_nr):
     return n_jokes
 
 
-def about(request):
-    return render(request, 'tip/about.html', {'title': 'about'})  # add title by hand
+@login_required
+@csrf_protect
+def all_matches(request):
+    author_profile = Profile.objects.get(user=request.user)
+    print('author_profil', author_profile)
+    if request.method == 'POST':
+        for k, v in request.POST.items():  # k id zu tipp post, v tipps
+            # print(request.POST.items())
+            print('k:', k)
+            print('v:', v)
+            m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
+            if k.startswith('Tipp-'):
+                try:
+                    match_id = int(k.strip('Tipp-'))  # Tipp id started mit "Tipp-" + id
+                    # print(match_id)
+                except:
+                    raise Http404
+                # get input in {tipp : tipp} format
+                # m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
+                match = get_object_or_404(Match, pk=match_id)
+                if m:
+                    # match = get_object_or_404(Match, pk=match_id)
+                    if not match.has_started():
+                        try:
+                            tipp = Tip.objects.get(author=request.user, match__id=match_id)
+                        except:
+                            tipp = None
+                        home_score = m.group('home_score')  # string in v vor :
+                        guest_score = m.group('guest_score')  # string in v nach :
+                        if tipp:
+                            # fülle model falls tipp schon vorhanden
+                            tipp.date_posted = timezone.now
+                            tipp.tip_home = home_score
+                            tipp.tip_guest = guest_score
+                            tipp.save()
+                            # falls tipp nicht vorhanden erstelle neuen
+                        else:
+                            tipp = Tip(
+                                author=User.objects.get(pk=request.user.pk),
+                                match=match,
+                                tip_date=timezone.now(),
+                                tip_home=home_score,
+                                tip_guest=guest_score,
+                            )
+                            tipp.save()
+                # falls tipp schon vorhanden aber joker wird rausgenommen,
+                # dann ist k leer und joker nicht gespeichert.
+                try:
+                    tipp = Tip.objects.get(author=request.user, match__id=match_id)
+                except:
+                    tipp = None
+                if tipp:
+                    tipp.joker = 0
+                    tipp.tip_date = timezone.now()
+                    tipp.save()
+            elif k.startswith('Joker-'):
+                try:
+                    match_id = int(k.strip('Joker-'))
+                except:
+                    raise Http404
+                match = get_object_or_404(Match, pk=match_id)
+                if not match.has_started():
+                    # tipp muss existieren sonst fehler
+                    try:
+                        tipp = Tip.objects.get(author=request.user, match__id=match_id)
+                    except:
+                        tipp = None
+
+                    print('number_joker: ', get_n_joker(request, match.matchday))
+                    print('tipp: ', tipp)
+                    if is_joker_valid(match.matchday, get_n_joker(request, match.matchday)) and tipp:
+                        print('hihihi')
+                        tipp.joker = 1
+                        tipp.save()
+                    elif not is_joker_valid(match.matchday, get_n_joker(request, match.matchday)):
+                        print('huhuhu')
+                        messages.warning(request, 'Zu viele Joker gesetzt! Anzahl Joker:'
+                                         + str(get_n_joker(request, match.matchday)))
+        return HttpResponseRedirect(reverse('tip-all-matches'))
+
+    matches = Match.objects.all()
+    tipps = Tip.objects.filter(author=request.user)
+    tipps_by_matches = {t.match.pk: t for t in tipps}
+    # current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday
+    context = {
+        # 'number': match.match_date,
+        'match': matches,
+        'tipps': tipps_by_matches,
+        # 'c_mday': current_matchday,
+    }
+    # 'tip/matchday.html'
+    return render(request, 'tip/all_matches.html', context)
 
 
 @login_required
@@ -211,25 +304,57 @@ def settings(request, matchday_number):
 
 
 def champion(request):
+    # do it with twp checkboxes
     if request.method == 'POST':
         for k, v in request.POST.items():
             print('k_champion:', k)
             print('v_champion:', v)
-            if k.startswith('Champion-'):
+            if k.startswith('Out-'):
                 try:
-                    champion_id = int(k.strip('Champion-'))  # Tipp id started mit "Tipp-" + id
+                    champion_id = int(k.strip('Out-'))  # Tipp id started mit "Tipp-" + id
                     print(champion_id)
                 except:
                     raise Http404
                 champion = Champion.objects.get(champion__id=champion_id)
-                champion.out = 1
+                print("-----------")
+                print("champion:", champion)
+                print("champion.champion.team_name", champion.champion.team_name)
+                print("chamption.id", champion.id)
+                print("champion.champion.id", champion.champion.id)
+                print("champ_id", champion_id)
+                champion.eliminated = 1
                 champion.save()
+                print(champion.eliminated)
+                champions = Champion.objects.all()
+                for champ in champions:
+                    print("_______________")
+                    print(champ.champion.team_name)
+                    print("champ:", champ.champion)
+                    print("champ.id", champ.id)
+                    print("champ.champion.id", champ.champion.id)
+                    print("champ_id", champion_id)
+                    print(champ.eliminated)
+            elif k.startswith('In-'):
+                try:
+                    champion_id = int(k.strip('In-'))  # Tipp id started mit "Tipp-" + id
+                    print(champion_id)
+                except:
+                    raise Http404
+                champion = Champion.objects.get(champion__id=champion_id)
+                print("-----------")
+                print("champion:", champion)
+                print("champion.champion.team_name", champion.champion.team_name)
+                print("chamption.id", champion.id)
+                print("champion.champion.id", champion.champion.id)
+                print("champ_id", champion_id)
+                champion.eliminated = 0
+                champion.save()
+                print(champion.eliminated)
         messages.success(request, 'Gespeichert!')
         return HttpResponseRedirect(reverse('tip-champion'))
     champions = Champion.objects.all()
+    print(champions)
     context = {
         'champions': champions,
     }
-    print(champions)
     return render(request, 'tip/settings/champion.html', context)
-

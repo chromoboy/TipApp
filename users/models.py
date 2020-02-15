@@ -4,7 +4,7 @@ from Tip.models import Team, Tip, Match, Champion
 from PIL import Image
 
 champion_choices = [(team.team_ccode, team.team_name) for team in Team.objects.all()]
-champion_choices.append([('---'), ('---')])
+champion_choices.append([('----'), ('----')])
 
 
 class Profile(models.Model):
@@ -12,6 +12,7 @@ class Profile(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     score = models.IntegerField(default=0)
     rank = models.IntegerField(default=0)
+    # champion = models.ForeignKey(Champion, on_delete=models.CASCADE)
     user_champion = models.CharField(max_length=12, choices=champion_choices, default='----')
     joker = models.IntegerField(default=0)
 

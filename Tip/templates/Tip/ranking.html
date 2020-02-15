@@ -67,7 +67,11 @@
                         <p class="align-right">{{ user.score }}</p>
                       </div>
                       <div class="col">
-                        <p class="align-right">{{ user.champion }}</p>
+{#                        {% if not user.user_champion.eliminated %}#}
+                        <p class="align-right">{{ user.user_champion }}</p>
+{#                        {% else %}#}
+{#                        <p> </p>#}
+{#                        {% endif %}#}
                       </div>
                </div>
                <div class="row">
