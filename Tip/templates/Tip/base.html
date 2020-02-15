@@ -37,7 +37,8 @@
                         <a class="nav-item nav-link" href="{% url 'tip-ranking' %}">Ranking</a>
 
                       <div class="dropdown">
-                        <a class="nav-item nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        <a class="nav-item nav-link dropdown-toggle" href="{% url 'tip-all-matches' %}"
+                           role="button" id="dropdownMenuLink"
                            data-toggle="dropdown" aria-expanded="false">
                             Spielplan
                         </a>
@@ -102,13 +103,13 @@
         </div>
         <div class="col-md-4">
           <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
+{#            <h3>Our Sidebar</h3>#}
+{#            <p class='text-muted'>You can put any information here you'd like.#}
               <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Posts</li>
-                <li class="list-group-item list-group-item-light">Announcements</li>
-                <li class="list-group-item list-group-item-light">Calendars</li>
-                <li class="list-group-item list-group-item-light">etc</li>
+                <li class="list-group-item list-group-item-light">Rang: {{ user.profile.rank}}.</li>
+                <li class="list-group-item list-group-item-light">Punkte: {{ user.profile.score }}</li>
+                <li class="list-group-item list-group-item-light">Joker gesetzt: {{ user.profile.joker }}</li>
+                <li class="list-group-item list-group-item-light">Champion: {{ user.profile.user_champion }}</li>
               </ul>
             </p>
           </div>

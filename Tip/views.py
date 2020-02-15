@@ -4,7 +4,7 @@ from django.core.checks import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect
-from users.models import User, Profile
+from users.models import User
 from .models import Match, Team, Tip, Champion
 from users.models import Profile
 from django.http import Http404, HttpResponseRedirect
@@ -14,14 +14,19 @@ from django.contrib import messages
 
 
 def home(request):
-    # current_matchday = Match.objects.filter(match_date__gte
-    #                                         =timezone.now()).order_by('match_date')[0].matchday
-    #
+    top_players = Profile.objects.order_by('-score', 'user__username')[:3]
+    three_upcoming_matches = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0:3]
+    tipps = Tip.objects.filter(author=request.user)
+    tipps_by_matches = {t.match.pk: t for t in tipps}
+    # upcoming_matches = Match.objects.filter(date__gt=timezone.now()).order_by('match_date')[0]
+    # three_upcoming_matches = filter(lambda x: x < , [upcoming_matches + i for i in (0, 1, 2)])
+    print(top_players)
+    print(three_upcoming_matches)
+    print(tipps_by_matches)
     context = {
-        'tip': Tip.objects.all(),
-        'match': Match.objects.all(),
-        'team': Team.objects.all(),
-        # 'c_mday': current_matchday,
+        'top_player': top_players,
+        'upcoming_matches': three_upcoming_matches,
+        'tipps': tipps_by_matches,
     }
     return render(request, 'tip/home.html', context)  # make tip accessible for request
     # HttpResponse('<h1> Tip Home</h1>')
