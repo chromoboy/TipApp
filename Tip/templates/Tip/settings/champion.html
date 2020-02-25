@@ -50,6 +50,9 @@
         </article>
         <button type="submit" class="btn btn-outline-success mb-4">{% trans "Save" %}</button>
     </form>
+    <form action={% url 'tip-settings-update' %}>
+        <button type="submit" class="btn btn-outline-success mb-4">{% trans "Update" %}</button>
+    </form>
 </section>
 {% endblock content %}
 {#                    <fieldset id="group1">#}

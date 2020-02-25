@@ -70,6 +70,7 @@
                      {% endif %}
                      {% if user.is_staff %}
                        <a class="nav-item nav-link" href="{% url 'tip-champion' %}">Champions</a>
+                       <a class="nav-item nav-link" href="{% url 'tip-mail' %}">Email</a>
                      {%  endif %}
 {#                        <a class="nav-item nav-link" href="{% url 'tip-matchday' matchday_number= %}">Matchplan</a>#}
                     </div>
@@ -78,7 +79,7 @@
                         {% if user.is_authenticated %}
 {#                           built in django authentication boolean#}
                         <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-                            <a class="nav-item nav-link" href="{% url 'profile' %}">Profil</a>
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">Profil</a>
                         {% else %}
                         <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                         <a class="nav-item nav-link" href="{% url 'register' %}">Registrieren</a>

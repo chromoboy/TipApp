@@ -21,5 +21,6 @@ urlpatterns = [
     path('settings/<int:matchday_number>/', views.settings, name='tip-settings'),
     path('update_score_and_ranks/', views.update_scores_and_ranks, name='tip-settings-update'),
     path('settings/champion/', views.champion, name='tip-champion'),
+    path('email/', views.email, name='tip-mail'),
     ]
 

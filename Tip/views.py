@@ -1,4 +1,3 @@
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.checks import messages
 from django.shortcuts import render, get_object_or_404, redirect
@@ -11,21 +10,32 @@ from django.http import Http404, HttpResponseRedirect
 import re
 from django.utils import timezone
 from django.contrib import messages
+from django.shortcuts import render
+from TipApp.settings import EMAIL_HOST_USER
+from django.core.mail import send_mail
 
+# -*- coding: utf-8 -*-
 
 def home(request):
     top_players = Profile.objects.order_by('-score', 'user__username')[:3]
-    three_upcoming_matches = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0:3]
+    upcoming_matches = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')
+    print(upcoming_matches)
+    print(len(upcoming_matches))
+    if len(upcoming_matches) > 3:
+        upcoming_matches = upcoming_matches[0:3]
+    else:
+        upcoming_matches = upcoming_matches[:len(upcoming_matches) - 1]
+    print(upcoming_matches)
     tipps = Tip.objects.filter(author=request.user)
     tipps_by_matches = {t.match.pk: t for t in tipps}
     # upcoming_matches = Match.objects.filter(date__gt=timezone.now()).order_by('match_date')[0]
     # three_upcoming_matches = filter(lambda x: x < , [upcoming_matches + i for i in (0, 1, 2)])
     print(top_players)
-    print(three_upcoming_matches)
+    # print(three_upcoming_matches)
     print(tipps_by_matches)
     context = {
         'top_player': top_players,
-        'upcoming_matches': three_upcoming_matches,
+        'upcoming_matches': upcoming_matches,
         'tipps': tipps_by_matches,
     }
     return render(request, 'tip/home.html', context)  # make tip accessible for request
@@ -363,3 +373,38 @@ def champion(request):
         'champions': champions,
     }
     return render(request, 'tip/settings/champion.html', context)
+
+
+def email(request):
+    """
+    send email to profiles which haven't tipped for next match yet.
+    :param request:
+    :return:
+    """
+    not_tipped = []
+    next_match = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0]
+    import sys
+    print(sys.getfilesystemencoding())
+    print("next match:", next_match)
+    print(next_match.id)
+    for user in Profile.objects.all():
+        try:
+            tipp = Tip.objects.get(author=user.user.id, match_id=next_match.id)
+
+        except:
+            tipp = None
+            print(user.user.email)
+        if not tipp:
+            not_tipped.append(user.user.email)
+            print("not_tipped:", not_tipped)
+    subject = 'Hi Papa'
+    message = 'Test-Mail aus der App...brauche beim nächsten Treffen leider dein Email-Passwort es sei denn wir legen \n' \
+              'einen eigenen Account fürs Tippspiel an '
+
+    print(subject)
+    print(message)
+    recepient = ['bschaeff@gmx.de']
+    if not_tipped:
+        send_mail(subject,
+              message, EMAIL_HOST_USER, recipient_list=recepient, fail_silently=False)
+    return HttpResponseRedirect(reverse('tip-champion'))
