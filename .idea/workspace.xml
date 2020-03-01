@@ -87,8 +87,8 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TipApp/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="119" column="23" selection-start-line="119" selection-start-column="23" selection-end-line="119" selection-end-column="23" />
+            <state relative-caret-position="194">
+              <caret line="66" column="70" lean-forward="true" selection-start-line="66" selection-start-column="70" selection-end-line="66" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -200,9 +200,10 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="36" />
     <option name="y" value="23" />
-    <option name="width" value="712" />
-    <option name="height" value="806" />
+    <option name="width" value="1404" />
+    <option name="height" value="804" />
   </component>
   <component name="ProjectId" id="1YKtXNGo0KgAjHmLD1kyUYeimT8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -221,12 +222,7 @@
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="env" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="media" type="462c0819:PsiDirectoryNode" />
+              <item name="staticfiles" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
@@ -236,25 +232,7 @@
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="Tip" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="Tip" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="Tip" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="users" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -441,17 +419,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="23" width="1440" height="804" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1440" height="804" extended-state="6" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50208336" side_tool="true" weight="0.41393444" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49791667" visible="true" weight="0.34246576" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49791667" visible="true" weight="0.34246576" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15347221" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20694445" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -758,8 +735,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TipApp/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="119" column="23" selection-start-line="119" selection-start-column="23" selection-end-line="119" selection-end-column="23" />
+        <state relative-caret-position="194">
+          <caret line="66" column="70" lean-forward="true" selection-start-line="66" selection-start-column="70" selection-end-line="66" selection-end-column="70" />
         </state>
       </provider>
     </entry>

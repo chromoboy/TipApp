@@ -15,7 +15,7 @@ urlpatterns = [
     path('all_matches/', views.all_matches, name='tip-all-matches'),
     # gebe für rangliste queryset zurück, dass spieler nach punkten sortiert und als users zurückgibt
     path('ranking/', login_required(ListView.as_view(queryset=Profile.objects.order_by('-score', 'user__username', 'joker'),
-                                                     context_object_name='users', template_name='Tip/ranking.html')),
+                                                     context_object_name='users', template_name='tip/ranking.html')),
          name="tip-ranking"
          ),
     path('ergebnisse/<int:matchday_number>/', views.ergebnisse, name='tip-settings'),

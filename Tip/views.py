@@ -43,7 +43,7 @@ def home(request):
         'tipps': tipps_by_matches,
     }
     return render(request, 'tip/home.html', context)  # make tip accessible for request
-    # HttpResponse('<h1> Tip Home</h1>')
+    # HttpResponse('<h1> tip Home</h1>')
 
 
 @login_required

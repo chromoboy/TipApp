@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Tip',
+            name='tip',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('tip_date', models.DateTimeField(default=django.utils.timezone.now)),

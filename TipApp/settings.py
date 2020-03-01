@@ -150,8 +150,10 @@ AWS_DEFAULT_ACL = None
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-print("BUCKET_NAME:", AWS_STORAGE_BUCKET_NAME)
-print(os.environ.get('AWS_STORAGE_BUCKET_NAME'))
-# print(AWS_ACCESS_KEY_ID)
-# print(AWS_SECRET_ACCESS_KEY)
-print(os.environ.get('USER'))
+
+print(os.path.join(BASE_DIR, "templates"))
+# print("BUCKET_NAME:", AWS_STORAGE_BUCKET_NAME)
+# print(os.environ.get('AWS_STORAGE_BUCKET_NAME'))
+# # print(AWS_ACCESS_KEY_ID)
+# # print(AWS_SECRET_ACCESS_KEY)
+# print(os.environ.get('USER'))
