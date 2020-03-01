@@ -1,0 +1,83 @@
+{% load i18n staticfiles %}
+{% block content %}
+
+<section data-role="content">
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <div class="row">
+                <div class="col">
+                  <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small><br>
+                  <small class="text-muted">Heim</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted">Tipp</small><br>
+                  <small class="text-muted">Ergebnis</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"> </small><br>
+                  <small class="text-muted">Gast</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"> </small><br>
+                  <small class="text-muted">Joker</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"> </small><br>
+                  <small class="text-muted">Punkte</small>
+                </div>
+              </div>
+{#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
+            </div>
+              <div class="row">
+                <div class="col">
+                    <p class=>{{ match.home_team.team_name}}</p>
+                </div>
+                <div class="col" align="left">
+                        <p >
+                                {% if tipp %}
+                                {{ tipp.tip_home }}:{{ tipp.tip_guest }}
+                                {% else %}
+                                -:-
+                                {% endif %}
+                        </p>
+                        <p>
+                                {% if match.home_score == -1 or match.guest_score == -1 %}
+                                -:-
+                                {% else %}
+                                {{ match.home_score }}:{{ match.guest_score }}
+                                {% endif %}
+                        </p>
+                </div>
+                <div class="col">
+                    <p>{{ match.guest_team.team_name}}</p>
+                </div>
+
+                <div class="col">
+                    <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}"
+                      {% if tipp.joker %} checked onclick="return false;" {% else %} unchecked onclick="return false;"
+                      {% endif %}>
+{#              {% if  tipp.joker  %}#}
+{#                  {{ tipp.joker }}#}
+{#                  <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}" onclick="return true;"/>#}
+{#              {% else %}#}
+{#                  hi#}
+{#                  <input type="checkbox" id="Joker-{{ match.id }}" name="Joker-{{ match.id }}" onclick="return false" />#}
+{#              {%  endif %}#}
+
+                </div>
+
+                <div class="col">
+                    {%  if tipp %}
+                        <p>{{ tipp.points }}</p>
+                    {% else %}
+                        <p> 0 </p>
+                    {% endif %}
+                 </div>
+
+            </div>
+          </div>
+        </article>
+</section>
+
+{% endblock content %}

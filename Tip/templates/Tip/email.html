@@ -1,0 +1,8 @@
+{% extends "tip/base.html" %}
+{% block content %}
+{% load i18n dicthelpers %}
+    <form action={% url 'tip-mail' %}>
+        <button type="submit" class="btn btn-outline-success mb-4">{% trans "Update" %}</button>
+    </form>
+</section>
+{% endblock content %}

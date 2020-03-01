@@ -1,0 +1,94 @@
+{% extends "tip/base.html" %}
+{% block content %}
+{% load i18n dicthelpers %}
+
+
+
+{#    <section data-role="content">#}
+{#    <ul data-role="listview" data-filter="true">#}
+{#    {% for user in users %}#}
+{#        <li class="border-bottom mb-8 border-top mb-8">#}
+{#            <h3>{{ user.rank }}. {{ user.user.username }}</h3>#}
+{#            <span> {{ user.image }}{{ user.rank }}. {{ user.user.username }} {{ user.score }} {% trans "points" %}</span>#}
+{##}
+{#        </li>#}
+{#    {% endfor %}#}
+{#    </ul>#}
+{#</section>#}
+
+
+    <section data-role="content">
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <div class="row">
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Rang</small>
+                </div>
+                <div class="col align-right">
+                  <small class="text-muted text-right"></small><br>
+                  <small class="text-muted text-right">Name</small>
+{#                  <small class="text-muted"></small><br>#}
+{#                  <small class="text-muted"></small>#}
+                </div>
+                <div class="col">
+{#                  <small class="text-muted"></small><br>#}
+{#                  <small class="text-muted"></small>#}
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Joker</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Punkte</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Champion</small>
+                </div>
+              </div>
+{#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
+            </div>
+              {% for user in users %}
+              <div class="row">
+                      <div class="col-xs-1 text-center">
+                          <p>  </p>
+                          <p class="text-center"> <span></span>{{ user.rank }}.</p>
+                      </div>
+                      <div class="col">
+                        <img class="rounded-circle mx-auto d-block" width="60" height="60" border="1px" src="{{ user.image.url }}">
+                      </div>
+                      <div class="col">
+                        <p>  </p>
+                        <p class="text-center">{{ user.user.username }}<br/></p>
+                      </div>
+                      <div class="col">
+                        <p>  </p>
+                        <p class="text-center">{{ user.joker }}</p>
+                      </div>
+                      <div class="col">
+                        <p>  </p>
+                        <p class="text-center">{{ user.score }}</p>
+                      </div>
+                      <div class="col">
+                        <p>  </p>
+{#                        {% if not user.user_champion.eliminated %}#}
+                        <p class="text-center">{{ user.user_champion }}</p>
+{#                        {% else %}#}
+{#                        <p> </p>#}
+{#                        {% endif %}#}
+                      </div>
+               </div>
+               <div class="row">
+               <p>
+
+               </p>
+               </div>
+              {%  endfor %}
+          </div>
+        </article>
+</section>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "tip/base.html" %}
+{% block content %}
+{% load i18n dicthelpers %}
+
+<section data-role="content">
+    <form action="{% url 'tip-matchday' number %}" method="post">
+    {% csrf_token %}
+    <div>
+        {% for match in match %}
+        {% with tipp=tipps|lookup:match.pk %}
+        <div>
+{#            # schlau zeige entweder text feld für tipp eingabe, solange spiel noch nicht gestartet ist oder#}
+            {% if match.has_started %}
+            {% include "tip/match/match_started.html" %}
+            {% else %}
+            {% include "tip/match/match_not_started.html" %}
+            {% endif %}
+        </div>
+        {% endwith %}
+        {% endfor %}
+        <button type="submit" id="myBtn" class="btn btn-outline-success mb-4">{% trans "Save" %}</button>
+    </div>
+{#    style="position:relative; top:25px; left: 50%;"#}
+    </form>
+</section>
+{% if match.has_other_pages %}
+  <nav aria-label="Page navigation example">
+  <ul class="pagination mb-4">
+    {% if match.has_previous %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ match.previous_page_number }}">
+          <span aria-hidden="true">&laquo;</span>
+          </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+          <span class="page-link" >&laquo;</span>
+      </li>
+    {% endif %}
+    {% for i in match.paginator.page_range %}
+      {% if match.number == i %}
+        <li class="page-item active">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if match.has_next %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ match.next_page_number }}">
+          &raquo;
+          </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+          <span class="page-link">&raquo;</span>
+      </li>
+    {% endif %}
+  </ul>
+  </nav>
+{% endif %}
+{% endblock %}
+
+
+
+{#function topFunction() {#}
+{#  document.body.scrollTop = 100; // For Safari#}
+{#  document.documentElement.scrollTop = 100; // For Chrome, Firefox, IE and Opera#}
+{#}#}
