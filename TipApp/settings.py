@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%0bil$rqek9xa)=6cf^%mp-od4n4el$4^42%uj289d4q1v#=wx'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -144,7 +144,7 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 
 # AWS_ACCESS_KEY_ID = "AKIA3HFZIWM7YQ5UCLKX"
 # AWS_SECRET_ACCESS_KEY = "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"
-# AWS_STORAGE_BUCKET_NAME = "tipp-app-storage-ireland"
+# AWS_STORAGE_BUCKET_NAME="tipp-app-storage-ireland"
 
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
