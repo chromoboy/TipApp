@@ -25,7 +25,7 @@ SECRET_KEY = '%0bil$rqek9xa)=6cf^%mp-od4n4el$4^42%uj289d4q1v#=wx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-tipapp.herokuapp.com', "127.0.0.1"]
 
 # Application definition
 
@@ -138,11 +138,21 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'batti750@googlemail.com'
 EMAIL_HOST_PASSWORD = 'sammy2003'
 
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-#
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-#
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+# AWS_ACCESS_KEY_ID = "AKIA3HFZIWM7YQ5UCLKX"
+# AWS_SECRET_ACCESS_KEY = "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"
+# AWS_STORAGE_BUCKET_NAME = "tipp-app-storage-ireland"
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+print("BUCKET_NAME:", AWS_STORAGE_BUCKET_NAME)
+print(os.environ.get('AWS_STORAGE_BUCKET_NAME'))
+# print(AWS_ACCESS_KEY_ID)
+# print(AWS_SECRET_ACCESS_KEY)
+print(os.environ.get('USER'))

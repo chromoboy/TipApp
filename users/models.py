@@ -5,7 +5,7 @@ from PIL import Image
 
 # champion_choices = [(team.team_ccode, team.team_name) for team in Team.objects.all()]
 # champion_choices.append([('----'), ('----')])
-champion_choices = [('----'), ('----')]
+champion_choices = [(('----'), ('----'))]
 
 
 class Profile(models.Model):
