@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bacd221f-080f-442b-97f5-6e3a31fb8838" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tip/migrations/0002_auto_20200131_1619.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tip/migrations/0003_auto_20200131_1651.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tip/migrations/0004_auto_20200131_1658.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TipApp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/TipApp/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tip/static/Tip/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/Tip/static/tip/main.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -57,7 +53,7 @@
         </entry>
       </file>
       <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/staticfiles/Tip/main.css">
+        <entry file="file://$PROJECT_DIR$/staticfiles/tip/main.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
               <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
@@ -218,18 +214,6 @@
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="staticfiles" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="staticfiles" type="462c0819:PsiDirectoryNode" />
-              <item name="Tip" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -237,6 +221,19 @@
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
               <item name="migrations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
+              <item name="Tip" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
+              <item name="Tip" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="tip" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
@@ -468,7 +465,7 @@
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49791667" weight="0.34246576" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26805556" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26805556" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49930555" weight="0.32876712" />
@@ -814,7 +811,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/staticfiles/Tip/main.css">
+    <entry file="file://$PROJECT_DIR$/staticfiles/tip/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
