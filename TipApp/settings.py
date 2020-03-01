@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
 
 ALLOWED_HOSTS = ['django-tipapp.herokuapp.com', "127.0.0.1"]
 
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'TipApp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,13 +137,13 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'batti750@googlemail.com'
 EMAIL_HOST_PASSWORD = 'sammy2003'
 
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 
-AWS_ACCESS_KEY_ID = "AKIA3HFZIWM7YQ5UCLKX"
-AWS_SECRET_ACCESS_KEY = "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"
-AWS_STORAGE_BUCKET_NAME="tipp-app-storage-ireland"
+# AWS_ACCESS_KEY_ID = "AKIA3HFZIWM7YQ5UCLKX"
+# AWS_SECRET_ACCESS_KEY = "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"
+# AWS_STORAGE_BUCKET_NAME="tipp-app-storage-ireland"
 
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
@@ -151,7 +151,7 @@ AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-print(os.path.join(BASE_DIR, "templates"))
+# print(os.path.join(BASE_DIR, "templates"))
 # print("BUCKET_NAME:", AWS_STORAGE_BUCKET_NAME)
 # print(os.environ.get('AWS_STORAGE_BUCKET_NAME'))
 # # print(AWS_ACCESS_KEY_ID)

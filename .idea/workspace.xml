@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bacd221f-080f-442b-97f5-6e3a31fb8838" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Tip/static/Tip/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/Tip/static/tip/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tip/static/tip/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/Tip/static/Tip/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/staticfiles/tip/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/Tip/main.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,7 +54,7 @@
         </entry>
       </file>
       <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/staticfiles/tip/main.css">
+        <entry file="file://$PROJECT_DIR$/staticfiles/Tip/main.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
               <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
@@ -214,39 +215,26 @@
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
+              <item name="staticfiles" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
-              <item name="migrations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
-              <item name="Tip" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="tip" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="TipApp" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TipApp" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
               <item name="Tip" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="tip" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="TipApp" type="b2602c69:ProjectViewProjectNode" />
@@ -811,7 +799,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/staticfiles/tip/main.css">
+    <entry file="file://$PROJECT_DIR$/staticfiles/Tip/main.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
