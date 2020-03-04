@@ -15,8 +15,8 @@ class Team(models.Model):
 
 class Match(models.Model):
     # one team has many matches
-    home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE, default="tba")
-    guest_team = models.ForeignKey(Team, related_name="guest_team", on_delete=models.CASCADE, default="tba")
+    home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE, default=0)
+    guest_team = models.ForeignKey(Team, related_name="guest_team", on_delete=models.CASCADE, default=0)
     match_date = models.DateTimeField(default=timezone.now)
     matchday = models.IntegerField(default=0)
     guest_score = models.IntegerField(default=-1)
