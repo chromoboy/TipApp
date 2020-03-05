@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from Tip.models import Team, Tip, Match, Champion
 from PIL import Image
 
-# champion_choices = [(team.team_ccode, team.team_name) for team in Team.objects.all()]
-# champion_choices.append([('----'), ('----')])
+champion_choices = [(team.team_ccode, team.team_name) for team in Team.objects.all()]
+champion_choices.append([('----'), ('----')])
 champion_choices = [(('----'), ('----'))]
 
 
