@@ -424,12 +424,13 @@ def email(request):
             not_tipped.append(user.user.email)
             # print("not_tipped:", not_tipped)
     subject = 'Hi Papa'
-    message = 'Test-Mail aus der App...brauche beim nächsten Treffen leider dein Email-Passwort es sei denn wir legen \n' \
-              'einen eigenen Account fürs Tippspiel an '
+    message = 'App ist jetzt aufm Server...kannst also hfftl einen Account erstellen ' \
+              'https://django-tipapp.herokuapp.com/'
 
     print(subject)
     print(message)
-    recepient = ['bschaeff@gmx.de']
+    # recepient = ['bschaeff@gmx.de']
+    recepient = ['constantin.kurz@aol.com']
     if not_tipped:
         send_mail(subject,
                   message, EMAIL_HOST_USER, recipient_list=recepient, fail_silently=False)
