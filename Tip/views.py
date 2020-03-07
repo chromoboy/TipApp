@@ -28,7 +28,7 @@ def home(request):
     if len(upcoming_matches) > 3:
         upcoming_matches = upcoming_matches[0:3]
     else:
-        upcoming_matches = upcoming_matches[:len(upcoming_matches) - 1]
+        upcoming_matches = upcoming_matches[:len(upcoming_matches)]
     print(upcoming_matches)
     tipps = Tip.objects.filter(author=request.user)
     tipps_by_matches = {t.match.pk: t for t in tipps}
