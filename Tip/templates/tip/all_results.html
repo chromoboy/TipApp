@@ -1,0 +1,108 @@
+{% extends "tip/base.html" %}
+{% block content %}
+{% load i18n dicthelpers %}
+
+<section data-role="content">
+    <form action="{% url 'tip-all-results' %}" method="post">
+    {% csrf_token %}
+    <div>
+        {% for match in matches %}
+
+            <section data-role="content">
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <div class="row">
+                <div class="col">
+                  <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small><br>
+                  <small class="text-muted">Heim</small>
+                </div>
+                <div class="col">
+                  <small class="text-muted"></small><br>
+                  <small class="text-muted">Ergebnis</small>
+                </div>
+
+                <div class="col">
+                  <small class="text-muted"> </small><br>
+                  <small class="text-muted">Gast</small>
+                </div>
+
+              </div>
+{#              <small class="text-muted">{{ match.match_date|date:'d.m.Y H:i' }}</small>#}
+            </div>
+        <div class="row">
+
+        <div class="col">
+            <p>{{ match.home_team.team_name}}</p>
+        </div>
+
+        <div class="col">
+        {% if user.is_staff %}
+            <input type="text" data-mini="true" class="tippspiel_tippfield" id="Match-{{ match.id }}"
+                   name="Match-{{ match.id }}"
+                   placeholder= "{% if match.home_score or match.guest_score %} {{ match.home_score}}:{{ match.guest_score}} {% else %} -:- {% endif %}" />
+        {% elif not match.has_started %}
+             <input type="text" data-mini="true" class="tippspiel_tippfield" id="Match-{{ match.id }}"
+                   name="Match-{{ match.id }}"
+                   placeholder= "{% if match.home_score or match.guest_score %} {{ match.home_score}}:{{ match.guest_score}} {% else %} -:- {% endif %}" />
+        {% else %}
+            <p>{% if match.home_score or match.guest_score %} {{ match.home_score}}:{{ match.guest_score}} {% else %} -:- {% endif %}</p>
+        {%  endif %}
+        </div>
+
+        <div class="col">
+              <p>{{ match.guest_team.team_name}}</p>
+        </div>
+
+      </div>
+
+       </div>
+        </article>
+</section>
+
+        {% endfor %}
+
+        <button type="submit" class="btn btn-outline-success mb-4" onclick="myFunction()">{% trans "Save" %}</button>
+    </div>
+    </form>
+
+
+</section>
+{% if matches.has_other_pages %}
+  <nav aria-label="Page navigation example">
+  <ul class="pagination mb-4">
+    {% if matches.has_previous %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ matches.previous_page_number }}">
+          <span aria-hidden="true">&laquo;</span>
+          </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+          <span class="page-link" >&laquo;</span>
+      </li>
+    {% endif %}
+    {% for i in matches.paginator.page_range %}
+      {% if matches.number == i %}
+        <li class="page-item active">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if matches.has_next %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ matches.next_page_number }}">
+          &raquo;
+          </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+          <span class="page-link">&raquo;</span>
+      </li>
+    {% endif %}
+  </ul>
+  </nav>
+{% endif %}
+{% endblock %}

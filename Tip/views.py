@@ -23,20 +23,21 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 def home(request):
     top_players = Profile.objects.order_by('-score', 'user__username')[:3]
     upcoming_matches = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')
-    print(upcoming_matches)
-    print(len(upcoming_matches))
+    # print(upcoming_matches)
+    # print(len(upcoming_matches))
     if len(upcoming_matches) > 3:
         upcoming_matches = upcoming_matches[0:3]
     else:
         upcoming_matches = upcoming_matches[:len(upcoming_matches)]
-    print(upcoming_matches)
+    # print(upcoming_matches)
     tipps = Tip.objects.filter(author=request.user)
     tipps_by_matches = {t.match.pk: t for t in tipps}
     # upcoming_matches = Match.objects.filter(date__gt=timezone.now()).order_by('match_date')[0]
     # three_upcoming_matches = filter(lambda x: x < , [upcoming_matches + i for i in (0, 1, 2)])
-    print(top_players)
-    # print(three_upcoming_matches)
-    print(tipps_by_matches)
+    # print(top_players)
+    # # print(three_upcoming_matches)
+    # print(tipps_by_matches)
+    update_scores_and_ranks(request)
     context = {
         'top_player': top_players,
         'upcoming_matches': upcoming_matches,
@@ -48,7 +49,7 @@ def home(request):
 
 @login_required
 @csrf_protect
-def matchday(request, matchday_number):
+def tip_matchday(request, matchday_number):
     author_profile = Profile.objects.get(user=request.user)
     print('author_profil', author_profile)
     m_nr: int = int(matchday_number)
@@ -132,8 +133,8 @@ def matchday(request, matchday_number):
                                          + str(get_n_joker(request, m_nr)))
         return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
 
+    update_scores_and_ranks(request)
     match = Match.objects.filter(matchday=m_nr).order_by('match_date')
-
     tipps = Tip.objects.filter(author=request.user).filter(match__matchday=m_nr)
     tipps_by_matches = {t.match.pk: t for t in tipps}
     # Paginator
@@ -173,7 +174,7 @@ def get_n_joker(request, m_nr):
 
 @login_required
 @csrf_protect
-def all_matches(request):
+def tip_all_matches(request):
     author_profile = Profile.objects.get(user=request.user)
     print('author_profil', author_profile)
     if request.method == 'POST':
@@ -251,6 +252,7 @@ def all_matches(request):
                                          + str(get_n_joker(request, match.matchday)))
         return HttpResponseRedirect(reverse('tip-all-matches'))
 
+    update_scores_and_ranks(request)
     matches = Match.objects.all()
     tipps = Tip.objects.filter(author=request.user)
     tipps_by_matches = {t.match.pk: t for t in tipps}
@@ -287,12 +289,18 @@ def update_scores_and_ranks(request):
             user.save()
     current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday
     print(current_matchday)
-    return HttpResponseRedirect(reverse('tip-settings', kwargs={'matchday_number': current_matchday}))
+    return HttpResponseRedirect(reverse('tip-results', kwargs={'matchday_number': current_matchday}))
 
 
 @login_required
 @csrf_protect
 def ergebnisse(request, matchday_number):
+    """
+    zeige ergebnisse nach spieltag
+    :param request:
+    :param matchday_number:
+    :return:
+    """
     m_nr = int(matchday_number)
     current_matchday = Match.objects.filter(match_date__gte
                                             =timezone.now()).order_by('match_date')[0].matchday
@@ -314,13 +322,19 @@ def ergebnisse(request, matchday_number):
                 if m:
                     home_score = m.group('home_score')
                     guest_score = m.group('guest_score')
-                    if match.has_started():
+                    if not match.has_started():
                         match.home_score = home_score
                         match.guest_score = guest_score
                         print('score:', home_score, guest_score)
                         match.save()
+                    if match.has_started() and request.user.is_staff():
+                        match.home_score = home_score
+                        match.guest_score = guest_score
+                        print('is_staff...score:', home_score, guest_score)
+                        match.save()
         messages.success(request, 'Gespeichert!')
-        return HttpResponseRedirect(reverse('tip-settings', kwargs={'matchday_number': current_matchday}))
+        # return HttpResponseRedirect(reverse('tip-matchday', kwargs={'matchday_number': m_nr}))
+        return HttpResponseRedirect(reverse('tip-results', kwargs={'matchday_number': m_nr}))
     update_scores_and_ranks(request)
     matches = Match.objects.filter(matchday=m_nr)
     matches = matches.order_by('match_date')
@@ -339,7 +353,63 @@ def ergebnisse(request, matchday_number):
         'number': m_nr,
         'c_mday': current_matchday,
     }
-    return render(request, 'tip/settings.html', context)
+    return render(request, 'tip/results.html', context)
+
+@login_required
+@csrf_protect
+def all_ergebnisse(request):
+    """
+    zeige alle ergebnisse
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        for k, v in request.POST.items():  # k id zu tipp post, v tipps
+            # print(request.POST.items())
+            print('k_joker:', k)
+            print('v_joker:', v)
+            if k.startswith('Match-'):
+                try:
+                    match_id = int(k.strip('Match-'))  # Tipp id started mit "Tipp-" + id
+                    print(match_id)
+                except:
+                    raise Http404
+                m = re.match(r'^(?P<home_score>\d+):(?P<guest_score>\d+)', v)
+                match = get_object_or_404(Match, pk=match_id)
+                print('m', m)
+                # match = get_object_or_404(Match, pk=match_id)
+                if m:
+                    home_score = m.group('home_score')
+                    guest_score = m.group('guest_score')
+                    if not match.has_started():
+                        match.home_score = home_score
+                        match.guest_score = guest_score
+                        print('score:', home_score, guest_score)
+                        match.save()
+                    if match.has_started() and request.user.is_staff():
+                        match.home_score = home_score
+                        match.guest_score = guest_score
+                        print('is_staff...score:', home_score, guest_score)
+                        match.save()
+        messages.success(request, 'Gespeichert!')
+        return HttpResponseRedirect(reverse('tip-all-results'))
+    update_scores_and_ranks(request)
+
+    matches = Match.objects.all().order_by('match_date')
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(matches, 4)
+    try:
+        matches = paginator.page(page)
+    except PageNotAnInteger:
+        matches = paginator.page(1)
+    except EmptyPage:
+        matches = paginator.page(paginator.num_pages)
+
+    context = {
+        'matches': matches,
+    }
+    return render(request, 'tip/all_results.html', context)
 
 
 def champion(request):
@@ -396,7 +466,7 @@ def champion(request):
     context = {
         'champions': champions,
     }
-    return render(request, 'tip/settings/champion.html', context)
+    return render(request, 'tip/settings/templates/tip/champion.html', context)
 
 
 @staff_member_required

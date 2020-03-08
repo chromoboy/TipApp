@@ -44,6 +44,7 @@
                         </a>
 
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'tip-all-matches' %}">Alle Spiele</a>
                         <a class="dropdown-item" href="{% url 'tip-matchday' matchday_number=0 %}">1.Spieltag</a>
                         <a class="dropdown-item" href="{% url 'tip-matchday' matchday_number=1 %}">2.Spieltag</a>
                         <a class="dropdown-item" href="{% url 'tip-matchday' matchday_number=2 %}">3.Spieltag</a>
@@ -60,9 +61,10 @@
                         </a>
 
                       <div class="dropdown-menu " aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'tip-settings' matchday_number=0 %}">1.Spieltag</a>
-                        <a class="dropdown-item" href="{% url 'tip-settings' matchday_number=1 %}">2.Spieltag</a>
-                        <a class="dropdown-item" href="{% url 'tip-settings' matchday_number=2 %}">3.Spieltag</a>
+                        <a class="dropdown-item" href="{% url 'tip-all-results' %}">Alle Spiele</a>
+                        <a class="dropdown-item" href="{% url 'tip-results' matchday_number=0 %}">1.Spieltag</a>
+                        <a class="dropdown-item" href="{% url 'tip-results' matchday_number=1 %}">2.Spieltag</a>
+                        <a class="dropdown-item" href="{% url 'tip-results' matchday_number=2 %}">3.Spieltag</a>
                       </div>
 
                     </div>
