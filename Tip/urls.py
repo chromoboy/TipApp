@@ -23,5 +23,6 @@ urlpatterns = [
     # path('update_score_and_ranks/', views.update_scores_and_ranks, name='tip-settings-update'),
     path('champion/', views.champion, name='tip-champion'),
     path('email/', views.email, name='tip-mail'),
+    path('email/reminder', views.reminder_email, name='tip-reminder-mail')
     ]
 

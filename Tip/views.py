@@ -4,10 +4,12 @@ from django.core.checks import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect
+
+from Tip.forms import ContactForm
 from users.models import User
 from .models import Match, Team, Tip, Champion
 from users.models import Profile
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, BadHeaderError, HttpResponse
 import re
 from django.utils import timezone
 from django.contrib import messages
@@ -355,6 +357,7 @@ def ergebnisse(request, matchday_number):
     }
     return render(request, 'tip/results.html', context)
 
+
 @login_required
 @csrf_protect
 def all_ergebnisse(request):
@@ -466,12 +469,12 @@ def champion(request):
     context = {
         'champions': champions,
     }
-    return render(request, 'tip/settings/templates/tip/champion.html', context)
+    return render(request, 'tip/champion.html', context)
 
 
 @staff_member_required
 @csrf_protect
-def email(request):
+def reminder_email(request):
     """
     send email to profiles which haven't tipped for next match yet.
     :param request:
@@ -479,10 +482,6 @@ def email(request):
     """
     not_tipped = []
     next_match = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0]
-    import sys
-    # print(sys.getfilesystemencoding())
-    # print("next match:", next_match)
-    # print(next_match.id)
     for user in Profile.objects.all():
         try:
             tipp = Tip.objects.get(author=user.user.id, match_id=next_match.id)
@@ -499,9 +498,30 @@ def email(request):
 
     print(subject)
     print(message)
-    # recepient = ['bschaeff@gmx.de']
-    recepient = ['constantin.kurz@aol.com']
+    recepients = not_tipped
     if not_tipped:
         send_mail(subject,
-                  message, EMAIL_HOST_USER, recipient_list=recepient, fail_silently=False)
-    return HttpResponseRedirect(reverse('tip-champion'))
+                  message, EMAIL_HOST_USER, recipient_list=recepients, fail_silently=False)
+    return HttpResponseRedirect(reverse('tip-mail'))
+
+@csrf_protect
+def email(request):
+    recepients = []
+    for user in Profile.objects.all():
+        recepients.append(user.user.email)
+    print(recepients)
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            print(subject)
+            print(messages)
+            try:
+                send_mail(subject, message, EMAIL_HOST_USER, recipient_list=recepients)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('tip-mail')
+    return render(request, "tip/email.html", {'form': form})

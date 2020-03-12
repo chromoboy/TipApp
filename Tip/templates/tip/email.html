@@ -1,8 +1,19 @@
 {% extends "tip/base.html" %}
 {% block content %}
+{% load crispy_forms_tags %}
 {% load i18n dicthelpers %}
-    <form action={% url 'tip-mail' %}>
-        <button type="submit" class="btn btn-outline-success mb-4">{% trans "Update" %}</button>
-    </form>
-</section>
+<div>
+ <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="form-actions">
+      <button class="btn btn-outline-info mb-4" type="submit">Senden</button>
+    </div>
+</form>
+<form action={% url 'tip-reminder-mail' %} >
+    <div class="form-actions">
+        <button type="submit" class="btn btn-outline-info mb-4">{% trans "Reminder" %}</button>
+    </div>
+</form>
+</div>
 {% endblock content %}
