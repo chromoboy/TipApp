@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
 
-# DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['django-tipapp.herokuapp.com', "127.0.0.1"]
 
@@ -122,7 +122,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # os.makedirs(STATIC_TMP, exist_ok=True)
 # os.makedirs(STATIC_ROOT, exist_ok=True)
 

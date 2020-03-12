@@ -42,37 +42,27 @@ class Tip(models.Model):
         sg = self.match.guest_score
         th = self.tip_home
         tg = self.tip_guest
+        # no tip
         if -1 in [sh, sg, th, tg]:
             return 0
         sgn = lambda x: 0 if x == 0 else x / abs(x)
         points = 0
         ds = sh - sg
         dt = th - tg
-
+        if sh == th or sg == tg:
+            points += 1
         if sgn(ds) == sgn(dt):
             # correct tendency
+            points += 3
+        if ds == dt:
+            # correct difference
             points += 1
-            if ds == dt:
-                # correct difference
-                points += 1
-                if sh == th:
-                    # correct result
-                    points += 1
+        if sh == th:
+            # correct result
+            points += 1
         if self.joker:
-            points *= self.joker_multiplier()
+            points *= 2
         return points
-
-    def joker_multiplier(self):
-        """
-        :return: gibt joker faktor zurück. Vergabe Richtig?
-        """
-        if self.match.matchday < 3:
-            return 2
-        if self.match.matchday < 5:
-            return 4
-        if self.match.matchday < 7:
-            return 6
-        return 1
 
 
 class Champion(models.Model):
@@ -89,9 +79,4 @@ class Champion(models.Model):
     def __str__(self):
         return self.champion.team_name
 
-# TODO: Default Wert für Champion auf --- setzen sobald gesetzt änderung nicht mehr mögloch
-# (TODO: view für admin-champion bauen --> wenn draußen ranking zeigt das team nicht mehr)
-# TODO: view für alle spiele bauen
-# TODO: start page schauen
-# TODO: Punkte anpassen
-# TODO: zeige spieler die nächstes spiel nicht getippt haben und sende mail: https://docs.djangoproject.com/en/3.0/topics/email/
+#TODO: punkte von europameister anrechnen.
