@@ -51,13 +51,20 @@ class Tip(models.Model):
         dt = th - tg
         if sh == th or sg == tg:
             points += 1
+            print("===========================")
+            print("ein ergbniss richtig")
+            print("points", points)
         if sgn(ds) == sgn(dt):
+            print("tendenz richtig:")
+            print(sh,sg,th,tg, ds, dt )
+            print(sgn(ds))
+            print(sgn(dt))
             # correct tendency
             points += 3
         if ds == dt:
             # correct difference
             points += 1
-        if sh == th:
+        if sh == th and tg == sg:
             # correct result
             points += 1
         if self.joker:
