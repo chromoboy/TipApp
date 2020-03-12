@@ -2,12 +2,12 @@ from django.utils import timezone
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
 from Tip.models import Match
+from TipApp.settings import EMAIL_HOST_USER
 from .forms import UserRegisterForm
 from .forms import UserUpdateForm
 from .forms import ProfileUpdateForm
-from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 
 def register(request):
@@ -19,6 +19,12 @@ def register(request):
             form.save()  # also hashes pwd
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
+            subject = "Willkommen bei ShortyTipp"
+            message = f'Hi {username}'
+            print("email", form.cleaned_data.get('email'))
+            print(type(form.cleaned_data.get('email')))
+            send_mail(subject,
+                      message, EMAIL_HOST_USER, recipient_list=[form.cleaned_data.get('email')], fail_silently=False)
             return redirect('login')
     else:
         form = UserRegisterForm()
