@@ -492,9 +492,8 @@ def reminder_email(request):
         if not tipp:
             not_tipped.append(user.user.email)
             # print("not_tipped:", not_tipped)
-    subject = 'Hi Papa'
-    message = 'App ist jetzt aufm Server...kannst also hfftl einen Account erstellen ' \
-              'https://django-tipapp.herokuapp.com/'
+    subject = 'WO SIND DEINE TIPPS DU ARSCH?'
+    message = 'LIES DEN BETREFF DU IDIOT UND TIPPEN KANNST DU HIER: https://django-tipapp.herokuapp.com/'
 
     print(subject)
     print(message)
