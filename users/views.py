@@ -35,6 +35,8 @@ def register(request):
 def profile(request):
     current_matchday = Match.objects.filter(match_date__gte
                                             =timezone.now()).order_by('match_date')[0].matchday
+    first_match = Match.objects.filter(match_date__gte
+                                       =timezone.now()).order_by('match_date')[0]
     if request.method == 'POST':
         # gets post and files from current request
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -42,6 +44,7 @@ def profile(request):
                                    request.FILES,
                                    instance=request.user.profile)
         old_champion = request.user.profile.user_champion
+
         print("old data:", request.user.profile.user_champion)
         print("===pform===")
         print(p_form)
@@ -50,14 +53,14 @@ def profile(request):
         new_champion = p_form.cleaned_data.get('user_champion')
         print(new_champion)
         if u_form.is_valid() and p_form.is_valid():
-            if old_champion != '----' and old_champion != new_champion:
-                messages.warning(request,'Du willst deinen Champion ändern?')
+            if old_champion != new_champion and first_match.has_started():
+                messages.warning(request, 'Der Champion kann nach jetzt nicht mehr geändert werden! Ätsch!')
                 return redirect('profile')
-            else:
-                u_form.save()
-                p_form.save()
-                messages.success(request, 'Your account has been updated!')
-                return redirect('profile')
+        else:
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your account has been updated!')
+            return redirect('profile')
 
     else:
         u_form = UserUpdateForm(instance=request.user)
