@@ -56,7 +56,6 @@ def profile(request):
             if old_champion != new_champion and first_match.has_started():
                 messages.warning(request, 'Der Champion kann nach jetzt nicht mehr geändert werden! Ätsch!')
                 return redirect('profile')
-        else:
             u_form.save()
             p_form.save()
             messages.success(request, 'Your account has been updated!')
