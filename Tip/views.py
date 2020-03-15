@@ -254,8 +254,18 @@ def tip_all_matches(request):
                                          + str(get_n_joker(request, match.matchday)))
         return HttpResponseRedirect(reverse('tip-all-matches'))
 
+    matches = Match.objects.all().order_by('match_date')
+    # Pagination
+    page = request.GET.get('page', 1)
+    paginator = Paginator(matches, 4)
+    try:
+        matches = paginator.page(page)
+    except PageNotAnInteger:
+        matches = paginator.page(1)
+    except EmptyPage:
+        matches = paginator.page(paginator.num_pages)
+
     update_scores_and_ranks(request)
-    matches = Match.objects.all()
     tipps = Tip.objects.filter(author=request.user)
     tipps_by_matches = {t.match.pk: t for t in tipps}
     # current_matchday = Match.objects.filter(match_date__gte=timezone.now()).order_by('match_date')[0].matchday

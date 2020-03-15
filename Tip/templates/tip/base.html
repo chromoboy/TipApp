@@ -52,7 +52,6 @@
 
                     </div>
 
-                    {% if user.is_authenticated %}
 
                     <div class="dropdown">
                         <a class="nav-item nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -69,7 +68,6 @@
 
                     </div>
 
-                     {% endif %}
                      {% if user.is_staff %}
                        <a class="nav-item nav-link" href="{% url 'tip-champion' %}">Champions</a>
                        <a class="nav-item nav-link" href="{% url 'tip-mail' %}">Email</a>
